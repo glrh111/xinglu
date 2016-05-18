@@ -15,5 +15,14 @@ def make_shell_context():
 maneger.add_command("shell", Shell(make_context=make_shell_context))
 manage.add_command('db', MigrageCommand)
 
+@manager.command
+def test():
+	'''
+	unittests
+	'''
+	import unittest
+	tests = unittest.TestLoader().discover('tests')
+	unittests.TextTestRunner(verbosity=2).run(tests)
+
 if __name__ == '__main__':
 	manager.run()
