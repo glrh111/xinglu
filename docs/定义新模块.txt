@@ -1,0 +1,26 @@
+1 # 新建 blueprint
+app/auth/__init__.py
+
+from flask import Blueprint
+auth = Blueprint('auth', __name__)
+from . import views
+
+
+2 # 定义路由和controller
+app/auth/views.py
+
+from flask import render_template
+from . import auth
+
+@auth.route('/login')
+def login():
+	return render_template('auth/login.html')
+
+3 # 注册blueprint
+app/__init__.py
+
+from .auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint, url_prefix='/auth'
+
+4 # 访问
+host:port/auth/login

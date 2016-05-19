@@ -1,0 +1,51 @@
+123 56 250 233
+1. python文件夹 /var/www/nginx-default/test
+2. nginx的配置文件 /etc/nginx/nginx.conf
+location 写在这个地方
+http {
+...
+    server {
+        ...
+        location ...
+    }
+}
+检查参数：/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
+3. 无法启动程序
+yum install uwsgi-plugin-python
+xml 加入 <plugins>python</
+
+4. 删除conf.d/默认配置文件
+
+5. 访问！
+
+
+4. 找到nginx进程编号，重新启动
+
+/etc/init.d/nginx restart
+
+uwsgi -x test_config.xml
+
+/etc/init.d/nginx start
+
+
+
+flask-script
+
+flask-bootstrap
+flask-moment
+flask-wtf
+
+flask-sqlalchemy
+
+flask-migrate 数据库迁移
+
+flask-mail
+
+flask-script
+
+认证：
+flask-login
+werkzeug
+itsdangerous
+
+

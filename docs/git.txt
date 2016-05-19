@@ -1,0 +1,10 @@
+git init  初始化repo
+git add 添加文件
+git commit -m "comments" 添加注释
+git push -u origin master 上传文件
+git remote add origin https://github.com/glrh111/flask.git  建立remote repo
+git remote rm origin  删除设置的remote
+
+
+git clone 从remote建立本地repo
+git pull 更新
