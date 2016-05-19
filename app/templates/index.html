@@ -2,13 +2,9 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<h1>你好啊, {% if name %}{{ name|capitalize }}{% else %}Stranger{% endif %}</h1>
-<!-- <a hef="#"><img src="{{url_for('static', filename='img/img.png') }}" alt=""></a> -->
-{% if known %}
-<p>碉堡了，你又来了</p>
-{% else %}
-<p>初次见面，我很高兴</p>
-{% endif %}
 
-{{ wtf.quick_form(form) }}
+<div class="page-header">
+<h1>你好啊, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}</h1>
+</div>
+<p>新用户请点击注册<a href="{{ url_for('auth.register') }}">注册</a></p>
 {% endblock %}
