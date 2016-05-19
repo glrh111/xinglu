@@ -1,0 +1,14 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1>你好啊, {% if name %}{{ name|capitalize }}{% else %}Stranger{% endif %}</h1>
+<!-- <a hef="#"><img src="{{url_for('static', filename='img/img.png') }}" alt=""></a> -->
+{% if known %}
+<p>碉堡了，你又来了</p>
+{% else %}
+<p>初次见面，我很高兴</p>
+{% endif %}
+
+{{ wtf.quick_form(form) }}
+{% endblock %}

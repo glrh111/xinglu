@@ -1,4 +1,4 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+from . import db
 
 class Role(db.Model):
 	__tablename__ = 'roles'
