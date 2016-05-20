@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 from app.models import User
+from flask import current_app
+from config import config
 
 class UserModelTestCase(unittest.TestCase):
 	def test_password_setter(self):
@@ -22,6 +24,13 @@ class UserModelTestCase(unittest.TestCase):
 		u1 = User(password='pass1')
 		u2 = User(password='pass2')
 		self.assertTrue(u1.password_hash != u2.password_hash)
+
+	# 默认权限相关
+	def test_default_permission(self):
+		u1 = User(email=current_app.config['FLASK_ADMIN'])
+		u2 = User(email='suibianxiede')
+		self.assertTrue(u1.role.name=='Administrator')
+		self.assertTrue(u2.role.name!='Administrator')
 
 	# 确认邮件相关
 	def test_confirmed_default(self):

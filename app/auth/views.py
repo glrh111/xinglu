@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, redirect, request, url_for, flash
 from . import auth
-from flask.ext.login import login_required, login_user, logout_user
+from flask.ext.login import login_required, login_user, logout_user, current_user
 from ..models import User
 from .. import db
 from .forms import LoginForm, RegisterForm
+from ..email import send_email
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -34,9 +35,32 @@ def register():
 		return redirect(url_for('auth.login'))
 	return render_template('auth/register.html', form = form)
 
-
-
-@auth.route('/secret')
+@auth.route('/confirm/<token>')
 @login_required
-def secret():
-	return u'未登录，不能访问。:)'
+def confirm(token):
+	if current_user.confirmed:
+		return redirect(url_for('main.index'))
+	if current_user.confirm(token):
+		flash(u'已经验证成功，谢谢！')
+	else:
+		flash(u'你这个验证邮件不可用，请重新验证')
+	return redirect(url_for('main.index'))
+
+# @auth.before_app_request
+# def before_request():
+# 	# if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
+# 		return redirect(url_for('auth.unconfirmed'))
+
+@auth.route('/unconfirmed')
+def unconfirmed():
+	if current_user.is_anonymous or current_user.confirmed:
+		return redirect(url_for('main.index'))
+	return render_template('auth/unconfirmed.html')
+
+@auth.route('/confirm')
+@login_required
+def resend_confirmation():
+	token = current_user.generate_confirmation_token()
+	send_email(current_user.email, u'[确认邮箱]', 'auth/email/confirm', user=current_user, token=token)
+	flash(u'邮件已发至你邮箱，请看看')
+	return redirect(url_for('main.index'))

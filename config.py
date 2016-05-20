@@ -6,7 +6,7 @@ class Config:
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	FLASK_MAIL_SUBJECT_PREFIX = '[glrh11]'
 	FLASK_MAIL_SENDER = 'glrh11 <glrh11_test@163.com>'
-	FLASK_ADMIN = os.environ.get('FLASK_ADMIN') or 'FLASK_ADMIN'
+	FLASK_ADMIN = os.environ.get('FLASK_ADMIN') or 'glrh11_test@163.com'
 
 	@staticmethod
 	def init_app(app):
