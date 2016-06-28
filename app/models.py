@@ -77,6 +77,8 @@ class User(db.Model, UserMixin):
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
+	# head_portrait = db.Column(db.String(64), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+
 	# 生成密码的hash，并提供
 	@property
 	def password(self):

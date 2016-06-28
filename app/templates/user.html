@@ -12,11 +12,6 @@
 		<p>地址：{{ user.location }}</p>
 	{% endif %}
 
-
-	{% if current_user.is_administrator() %}
-	<p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>		
-	{% endif %}
-
 	{% if user.last_seen %}
 	<p>上次登录时间：{{ moment(user.last_seen).fromNow() }}
 	{% endif %}
