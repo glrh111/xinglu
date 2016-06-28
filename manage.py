@@ -24,5 +24,9 @@ def test():
 	tests = unittest.TestLoader().discover('tests')
 	unittest.TextTestRunner(verbosity=2).run(tests)
 
+@manager.command
+def deploy():
+    pass
+
 if __name__ == '__main__':
 	manager.run()
