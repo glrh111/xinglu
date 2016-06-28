@@ -1,7 +1,13 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-老王的小窝 - 好男人老王
+楼上老王 - 老王的朋友来此吃喝玩乐
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
 
 {% block scripts %}
@@ -24,15 +30,17 @@
 	</div>
 	<div class="navbar-collapse collapse">
 		<ul class="nav navbar-nav">
-			<li><a href="/">摄影</a></li>
-			<li><a href="/">音乐</a></li>
-			<li><a href="/">编程</a></li>
+			<li><a href="{{ url_for('main.user_list') }}">用户列表</a></li>
+<!-- 			<li><a href="/">音乐</a></li> -->
+<!-- 			<li><a href="/">编程</a></li>
 			<li><a href="/">游玩</a></li>
-			<li><a href="/">扯淡</a></li>
+			<li><a href="/">扯淡</a></li> -->
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			{% if current_user.is_authenticated %}
+				<li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ current_user.username }}</a></li>
 				<li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+				}
 			{% else %}
 				<li><a href="{{ url_for('auth.login') }}">登录</a></li>
 			{% endif %}

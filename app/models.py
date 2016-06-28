@@ -73,6 +73,7 @@ class User(db.Model, UserMixin):
 	name = db.Column(db.String(64))
 	location = db.Column(db.String(64))
 	about_me = db.Column(db.Text())
+	# default could accept func as arg, every time 
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
