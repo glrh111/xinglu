@@ -77,7 +77,9 @@ class User(db.Model, UserMixin):
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
-	# head_portrait = db.Column(db.String(64), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+	head_portrait = db.Column(db.String(128), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+
+	posts = db.relationship('Post', backref='author', lazy='dynamic')
 
 	# 生成密码的hash，并提供
 	@property
@@ -124,9 +126,26 @@ class User(db.Model, UserMixin):
 	def __repr__(self):
 		return '<User %r>' % self.username
 
+class Post(db.Model):
+	'''
+	posts
+	'''
+	__tablename__ = 'posts'
+
+	id = db.Column(db.Integer, primary_key=True)
+	body = db.Column(db.Text)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
 class AnonymousUser(AnonymousUserMixin):
+	'''
+	formal
+	'''
 	def can(self, permissions):
 		return False
 
 	def is_administrator(self):
 		return False
+
+login_manager.anonymous_user = AnonymousUser

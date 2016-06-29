@@ -43,3 +43,7 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.username and \
             User.query.filter_by(username=field.data).first():
             raise ValidationError(u'该用户名已被使用，请更换')
+
+class PostForm(Form):
+    body = TextAreaField(u'写下你的心情吧', validators=[Required()])
+    submit = SubmitField(u'提交')

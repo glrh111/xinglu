@@ -11,8 +11,10 @@ Desktop.ini
 dist
 build
 
+# DataBase
+# *.sqlite
+
 # project
-/migrations
 /venv
 
 

@@ -1,15 +1,28 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block page_content %}
 
+{# 文章输入框框 #}
 <div class="page-header">
-<h1>你好啊, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}</h1>
-</div>
+
 {% if not current_user.is_authenticated %}
 <p>新用户请点击注册<a href="{{ url_for('auth.register') }}">注册</a></p>
 {% endif %}
 
-<p>这里是俺老王的网站</p>
+<div>
+{% if  current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+{% endif %}
+</div>
+
+</div>
+
+
+
+{# 文章列表 #}
+{% include "_posts.html" %}
+
 
 {% endblock %}
