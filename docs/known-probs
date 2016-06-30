@@ -1,0 +1,7 @@
+已知的问题:
+
+1. AttributeError: 'AnonymousUserMixin' object has no attribute 'can', 但是明明定义了该方法
+
+model 里面加入：login_manager.anonymous_user = AnonymousUser
+
+2. 

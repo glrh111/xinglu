@@ -1,26 +1,47 @@
+{% extends "base.html" %}
 {% block page_content %}
+{% import "_macros.html" as macros %}
 
 <div class='page-header'>
 	<h1>{{ user.username }}</h1>
-	{% if user.name or user.location %}
-		<p>
-		{% if user.name %}
-			{{ user.name }}
-		{% endif %}
-		{% if user.location %}
-			你的地址是:{{ user.location }}!
-		{% endif %}
-		</p>
+
+	
+	{% if user.name %}
+		<p>姓名：{{ user.name }}</p>
+	{% endif %}
+	{% if user.location %}
+		<p>地址：{{ user.location }}</p>
 	{% endif %}
 
-	{% if current_user.is_administrator() %}
-	<p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>		
+	{% if user.last_seen %}
+	<p>上次登录时间：{{ moment(user.last_seen).fromNow() }}
 	{% endif %}
 
+	<p>邮件地址：<a href="mailto:{{ user.email }}">{{ user.email }}<a></p>
 
-
+{% if user == current_user and not current_user.is_administrator() %}
+	<a class="btn btn-default" href="{{ url_for('.edit_profile') }}">修改资料</a>
+{% endif %}
+{% if current_user.is_administrator() %}
+	<a class="btn btn-default" href="{{ url_for('.edit_profile_admin', id=user.id) }}">管理员修改</a>
+{% endif %}
 </div>
 
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">文章列表</h3>
+  </div>
+  <div class="panel-body">
+    {% include "_posts.html" %}
+  </div>
+</div>
+
+
+
+<div class="pagination">
+{{ macros.pagination_widget(pagination, 'main.user', username=current_user.username) }}
+</div>
 
 
 {% endblock %}

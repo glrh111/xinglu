@@ -6,6 +6,8 @@ from . import login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from datetime import datetime
+import bleach
+from markdown import markdown
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -73,8 +75,13 @@ class User(db.Model, UserMixin):
 	name = db.Column(db.String(64))
 	location = db.Column(db.String(64))
 	about_me = db.Column(db.Text())
+	# default could accept func as arg, every time 
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+
+	head_portrait = db.Column(db.String(128), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+
+	posts = db.relationship('Post', backref='author', lazy='dynamic')
 
 	# 生成密码的hash，并提供
 	@property
@@ -117,13 +124,87 @@ class User(db.Model, UserMixin):
 		self.last_seen = datetime.utcnow()
 		db.session.add(self)
 
+	# 生成虚拟用户
+	@staticmethod
+	def generate_fake(count=100):
+		from sqlalchemy.exc import IntegrityError
+		from random import seed
+		import forgery_py
+		# generate
+		seed()
+		for i in range(count):
+			u = User(email=forgery_py.internet.email_address(),\
+					 username=forgery_py.internet.user_name(True),\
+					 password=forgery_py.lorem_ipsum.word(),\
+					 confirmed=True,\
+					 name=forgery_py.name.full_name(),\
+					 location=forgery_py.address.city(),\
+					 about_me=forgery_py.lorem_ipsum.sentence(),\
+					 member_since=forgery_py.date.date(True),
+					 head_portrait='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+			db.session.add(u)
+			# is in afraid that username and email may be the same
+			try:
+				db.session.commit()
+			except IntegrityError:
+				db.session.rollback()
+
+
+
 	# print提供便利
 	def __repr__(self):
 		return '<User %r>' % self.username
 
+class Post(db.Model):
+	'''
+	posts
+	'''
+	__tablename__ = 'posts'
+
+	id = db.Column(db.Integer, primary_key=True)
+	body = db.Column(db.Text)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	# 用于将前端提交的mk渲染缓存
+	body_html = db.Column(db.Text)
+
+	# 生成虚拟文章post
+	@staticmethod
+	def generate_fake(count=1000):
+		from random import seed, randint
+		import forgery_py
+		# generate
+		seed()
+		user_count = User.query.count()
+		for i in range(count):
+			u = User.query.offset(randint(0, user_count-1)).first()
+			p = Post(body=forgery_py.lorem_ipsum.sentences(randint(1, 3)),\
+					 timestamp=forgery_py.date.date(True),\
+					 author=u)
+			db.session.add(p)
+			db.session.commit()
+
+	@staticmethod
+	def on_changed_body(target, value, oldvalue, initiator):
+		allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', \
+						'code', 'em', 'i', 'li', 'ol', 'pre', 'strong',\
+						'ul', 'h1', 'h2', 'h3', 'p']
+		target.body_html = bleach.linkify(bleach.clean(
+						markdown(value, output_format='html'),\
+						tags=allowed_tags, strip=True))
+
+# body 字段发生变化是，更新  body_html
+db.event.listen(Post.body, 'set', Post.on_changed_body)
+
+
 class AnonymousUser(AnonymousUserMixin):
+	'''
+	formal
+	'''
 	def can(self, permissions):
 		return False
 
 	def is_administrator(self):
 		return False
+
+login_manager.anonymous_user = AnonymousUser
