@@ -11,6 +11,9 @@ Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
 Flask-Login
 forgerypy
+flask-pagedown
+markdown
+bleach
 functools32==3.2.3.post2
 itsdangerous==0.24
 Jinja2==2.8

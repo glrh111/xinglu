@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField, TextAreaField, SelectField, \
-    BooleanField, PasswordField
+    BooleanField, PasswordField, FileField
+from flask.ext.pagedown.fields import PageDownField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from ..models import Role
 
@@ -45,5 +46,5 @@ class EditProfileAdminForm(Form):
             raise ValidationError(u'该用户名已被使用，请更换')
 
 class PostForm(Form):
-    body = TextAreaField(u'写下你的心情吧', validators=[Required()])
+    body = PageDownField(u'写下你的心情吧', validators=[Required()])
     submit = SubmitField(u'提交')

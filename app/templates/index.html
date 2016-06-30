@@ -1,7 +1,11 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ pagedown.include_pagedown() }}
+{% endblock %}
 
 {% block page_content %}
 
@@ -20,7 +24,8 @@
 
 </div>
 
-
+{# 只有登录的用户才显示，文章列表 #}
+{% if current_user.is_authenticated %}
 
 {# 文章列表 #}
 <div class="panel panel-primary">
@@ -32,8 +37,11 @@
   </div>
 </div>
 
+{# 页码 #}
 <div class="pagination">
 {{ macros.pagination_widget(pagination, 'main.index') }}
 </div>
+
+{% endif %}
 
 {% endblock %}
