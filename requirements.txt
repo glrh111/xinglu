@@ -10,10 +10,13 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
 Flask-Login
+<<<<<<< HEAD
 forgerypy
 flask-pagedown
 markdown
 bleach
+=======
+>>>>>>> 1fd00474b7c5fe45a991ffe5575d0f01ca231284
 functools32==3.2.3.post2
 itsdangerous==0.24
 Jinja2==2.8
