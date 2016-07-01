@@ -136,5 +136,34 @@ def edit_post(id):
     return render_template('edit_post.html', form=form)
 
 
+# 关注相关
+@main.route('/follow/<username>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash(u'没有这个用户')
+        return redirect(url_for('main.index'))
+    if current_user.is_following(user):
+        flash(u'你已经关注了这个用户')
+        return redirect(url_for('main.user', username=username))
+    current_user.follow(user)
+    flash(u'已成功关注 %s。' % username)
+    return redirect(url_for('main.user', username=username))
 
-	
+@main.route('/followers/<username>')
+def followers(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash(u'该用户不存在')
+        return redirect(url_for('main.index'))
+    # 分页
+    page = request.args.get('page', 1, type=int)
+    pagination = user.followers.paginate(\
+        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
+        error_out=False)
+    follows = [{'user': item.follower, 'timestamp':item.timestamp} for item in pagination.items]
+    return render_template('followers.html', user=user, title=u'关注者',\
+        endpoint='main.followers', pagination=pagination,\
+        follows=follows)

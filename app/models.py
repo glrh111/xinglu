@@ -45,6 +45,16 @@ class Role(db.Model):
 	def __repr__(self):
 		return '<Role %r>' % self.name
 
+
+class Follow(db.Model):
+	__tablename__ = 'follows'
+	follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), \
+		primary_key=True)
+	followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), \
+		primary_key=True)
+	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Permission:
 	FOLLOW = 0x01
 	COMMENT = 0x02
@@ -78,10 +88,38 @@ class User(db.Model, UserMixin):
 	# default could accept func as arg, every time 
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-
+	# 用户头像的七牛cdn 链接
 	head_portrait = db.Column(db.String(128), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
 
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+	followed = db.relationship('Follow', \
+								foreign_keys=[Follow.follower_id],\
+								backref=db.backref('follower', lazy='joined'),
+								lazy='dynamic',\
+								cascade='all, delete-orphan')
+
+	followers = db.relationship('Follow',\
+								foreign_keys=[Follow.followed_id],\
+								backref=db.backref('followed', lazy='joined'),\
+								lazy='dynamic',\
+								cascade='all, delete-orphan')
+
+	def follow(self, user):
+		if not self.is_following(user):
+			f = Follow(follower=self, followed=user)
+			db.session.add(f)
+
+	def unfollow(self, user):
+		f = self.followed.filter_by(followed_id=user.id).first()
+		if f:
+			db.session.delete(f)
+
+	def is_following(self, user):
+		return self.followed.filter_by(followed_id=user.id).first() is not None
+
+	def is_followed_by(self, user):
+		return self.followers.filter_by(follower_id=user.id).first() is not None
 
 	# 生成密码的hash，并提供
 	@property
@@ -195,6 +233,7 @@ class Post(db.Model):
 
 # body 字段发生变化是，更新  body_html
 db.event.listen(Post.body, 'set', Post.on_changed_body)
+
 
 
 class AnonymousUser(AnonymousUserMixin):
