@@ -8,6 +8,7 @@ class Config:
 	FLASK_MAIL_SENDER = 'glrh11 <glrh11_test@163.com>'
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN') or 'glrh11_test@163.com'
 
+
 	@staticmethod
 	def init_app(app):
 		pass
@@ -21,6 +22,11 @@ class DevelopmentConfig(Config):
 	MAIL_PASSWORD = 'woshishouquanma1' #'os.environ.get('MAIL_PASSWORD')'
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 	FLASKY_POSTS_PER_PAGE = 20
+	# QINIU related
+	QINIU_ACCESS_KEY = 'NLbTTwY2zwZBHIh6sIdzlVruMV-eUDkXUnw-Ko87'
+	QINIU_SECRET_KEY = 'LHCPI62Exu9m1W7zpwOzbqMSvm21hXGgjk4uXWo7'
+	QINIU_BUCKET_NAME = 'flask-test'
+	QINIU_PATH_PREFIX = 'http://o9hjg7h8u.bkt.clouddn.com/'
 
 class TestingConfig(Config):
 	TESTING = True
