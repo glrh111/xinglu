@@ -4,4 +4,9 @@
 
 model 里面加入：login_manager.anonymous_user = AnonymousUser
 
-2. 
+2. o9hjg7h8u.bkt.clouddn.com 此类测试域名，限总流量，限单 IP 访问频率，限速，仅供测试使用。
+但新申请的域名需要备案。暂时这么用。
+
+3. 七牛上传zone incorrect 的问题：
+qiniu.config里的zone设置问题，使用另外一个：）
+具体参阅qiniu源码

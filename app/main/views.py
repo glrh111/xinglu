@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, request, current_app
+from flask import render_template, session, redirect, url_for, flash, request, current_app, jsonify
 
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm
@@ -191,4 +191,44 @@ def followers(username):
     return render_template('followers.html', user=user, title=u'关注者',\
         endpoint='main.followers', pagination=pagination,\
         followers=followers)
+
+
+# 上传文件相关
+from ..helpers import upload_image
+@main.route('/upload-head/<username>')
+@login_required
+@permission_required(Permission.WRITE_ARTICLES)
+def upload_head(username):
+    user = User.query.filter_by(username=username).first()
+
+    if user is None:
+        flash(u'该用户不存在')
+        return redirect(url_for('main.user_list'))
+    # 非管理员或本人不得修改
+    if current_user != user and not current_user.can(Permission.ADMINISTER):
+        flash(u'你没有权限修改他人的头像信息')
+        return redirect('main.user', username=user.username)
+
+    # upload image and 
+    img_src, status = upload_image('head', 'c:/7586558412942142611.jpg')
+
+    if status:
+        # uploaded success
+        tag = u'头像上传成功'
+        # update to db
+        print img_src
+        user.head_portrait = img_src
+        db.session.add(user)
+    else:
+        # uploaded failed
+        tag = u'头像上传失败'
+
+    flash(tag)
+    return redirect(url_for('main.user', username=user.username))
+
+@main.route('/uptoken')
+def uptoken():
+    pass
+    # 不知道得用什么格式的json
+    # return jsonify(result=json.dumps(result, encoding='utf-8'))
 
