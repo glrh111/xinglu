@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block page_content %}
+{% import "_macros.html" as macros %}
+
+
+<div class="panel panel-default table-responsive">
+  <!-- Default panel contents -->
+  <div class="panel-heading">FANS列表</div>
+  <div class="panel-body">
+    <p>这里显示所有{{ user.username }}的粉丝的信息列表</p>
+  </div>
+
+  <!-- Table -->
+  <table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+        <th>id</th>
+        <th>姓名</th>
+        <th>用户名</th>
+        <th>邮箱</th>
+        <th>验证</th>
+        <th>上次登录时间</th>
+        <th>关注</th>
+    </tr>
+    </thead>
+
+    {# tbody 20pices per table #}
+    <tbody>
+    {% for follower in followers %}
+    <tr>
+        <td>{{follower.id}}</td>
+        <td>{{follower.name}}</td>
+        <td><a href="{{ url_for('main.user', username=follower.username) }}">{{follower.username}}<a></td>
+        <td>{{follower.email}}</td>
+        <td>{{follower.confirmed}}</td>
+        <td>{{follower.last_seen}}</td>
+        <td>
+            {% if current_user.can(Permission.FOLLOW) and follower != current_user %}
+                {% if not current_user.is_following(follower) %}
+                    <a href="{{ url_for('main.follow', username=follower.username) }}" class="btn btn-primary">关注</a>
+                {% else %}
+                    <a href="{{ url_for('main.unfollow', username=follower.username) }}" class="btn btn-primary">取消关注</a>
+                {% endif %}
+            {% else %}
+                <a href="#" class="btn btn-active">本人</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+
+{# pagination #}
+<div class="pagination">
+{{ macros.pagination_widget(pagination, 'main.followers', username=current_user.username) }}
+</div>
+    
+{% endblock %}

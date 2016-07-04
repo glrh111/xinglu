@@ -105,6 +105,7 @@ class User(db.Model, UserMixin):
 								lazy='dynamic',\
 								cascade='all, delete-orphan')
 
+	# follow related
 	def follow(self, user):
 		if not self.is_following(user):
 			f = Follow(follower=self, followed=user)

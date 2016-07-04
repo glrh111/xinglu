@@ -32,8 +32,15 @@ def index():
 @main.route('/user-list', methods=['GET', 'POST'])
 @login_required
 def user_list():
-    users = User.query.order_by(User.id).all()
-    return render_template('user_list.html', users=users)
+    # 分页相关
+    page = request.args.get('page', 1, type=int)
+    pagination = User.query.order_by(User.id).paginate(\
+        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
+        error_out=False)
+    users = pagination.items
+
+    return render_template('user_list.html', users=users, pagination=pagination, \
+        endpoint='main.user_list')
 
 # main page for each role
 @main.route('/admin')
@@ -152,6 +159,22 @@ def follow(username):
     flash(u'已成功关注 %s。' % username)
     return redirect(url_for('main.user', username=username))
 
+@main.route('/unfollow/<username>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash(u'没有这个用户')
+        return redirect(url_for('main.index'))
+    if not current_user.is_following(user):
+        flash(u'你已经取消关注了这个用户')
+        return redirect(url_for('main.user', username=username))
+    current_user.unfollow(user)
+    flash(u'成功取消关注 %s。' % username)
+    return redirect(url_for('main.user', username=username))
+
+
 @main.route('/followers/<username>')
 def followers(username):
     user = User.query.filter_by(username=username).first()
@@ -163,7 +186,9 @@ def followers(username):
     pagination = user.followers.paginate(\
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
         error_out=False)
-    follows = [{'user': item.follower, 'timestamp':item.timestamp} for item in pagination.items]
+    followers = [item.follower for item in pagination.items]
+    print followers
     return render_template('followers.html', user=user, title=u'关注者',\
         endpoint='main.followers', pagination=pagination,\
-        follows=follows)
+        followers=followers)
+

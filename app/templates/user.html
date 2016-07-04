@@ -25,7 +25,9 @@
 {% if current_user.is_administrator() %}
 	<a class="btn btn-default" href="{{ url_for('.edit_profile_admin', id=user.id) }}">管理员修改</a>
 {% endif %}
+
 {# 显示关注相关按钮 #}
+{# 如果不是当前用户，没显示这两个按钮：关注，取消关注 #}
 {% if current_user.can(Permission.FOLLOW) and user != current_user %}
     {% if not current_user.is_following(user) %}
         <a href="{{ url_for('main.follow', username=user.username) }}" class="btn btn-primary">关注</a>
