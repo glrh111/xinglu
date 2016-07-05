@@ -22,5 +22,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.1.13' IDENTIFIED BY 'password' WI
 5. pip install mysql (for windows)出错
 http://www.codegood.com/downloads
 
-6. 
+6. Centos 安装出错可能的解决办法
+yum install python-devel mysql-devel
+
+7. 文章列表后面，hover评论，有未知细线<div></div>出现（尚未解决）
 
