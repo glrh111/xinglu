@@ -1,0 +1,18 @@
+<div class="list-group">
+
+{% for comment in comments %}
+    <a href="#" class="list-group-item">
+        {# 评论标题 #}
+        <h4 class="list-group-item-heading">{{ comment.author.name }}：</h4>
+        {# 评论内容 #}
+        <p class="list-group-item-text">
+            {% if comment.body_html %}
+                {{ comment.body_html | safe }}
+            {% else %}
+                {{ comment.body }}
+            {% endif %}
+        </p>
+    </a>
+{% endfor %}
+
+</div>

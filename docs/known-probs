@@ -10,3 +10,17 @@ model 里面加入：login_manager.anonymous_user = AnonymousUser
 3. 七牛上传zone incorrect 的问题：
 qiniu.config里的zone设置问题，使用另外一个：）
 具体参阅qiniu源码
+
+4. mysql 远程连接问题
+use mysql;
+select host, user, password from user;
+允许所有主机访问
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;
+允许特定主机访问
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.1.13' IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+5. pip install mysql (for windows)出错
+http://www.codegood.com/downloads
+
+6. 
+

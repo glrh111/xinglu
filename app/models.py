@@ -105,6 +105,8 @@ class User(db.Model, UserMixin):
 								lazy='dynamic',\
 								cascade='all, delete-orphan')
 
+	comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
 	# follow related
 	def follow(self, user):
 		if not self.is_following(user):
@@ -206,6 +208,8 @@ class Post(db.Model):
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	# 用于将前端提交的mk渲染缓存
 	body_html = db.Column(db.Text)
+	# 评论相关的 field
+	comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
 	# 生成虚拟文章post
 	@staticmethod
@@ -247,4 +251,25 @@ class AnonymousUser(AnonymousUserMixin):
 	def is_administrator(self):
 		return False
 
+# 匿名用户的处理办法
 login_manager.anonymous_user = AnonymousUser
+
+class Comment(db.Model):
+	__tablename__ = 'comments'
+	id = db.Column(db.Integer, primary_key=True)
+	body = db.Column(db.Text)
+	body_html = db.Column(db.Text)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	disabled = db.Column(db.Boolean)
+	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
+	@staticmethod
+	def on_changed_body(target, value, oldvalue, initiator):
+		allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i', 'strong']
+		target.body_html = bleach.linkify(bleach.clean(
+						markdown(value, output_format='html'),\
+						tags=allowed_tags, strip=True))
+
+# body 字段发生变化是，更新  body_html
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)

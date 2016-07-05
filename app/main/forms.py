@@ -27,7 +27,7 @@ class EditProfileAdminForm(Form):
 
     email = StringField(u'电子邮箱', validators=[Required(), Length(1, 64), Email()])
     username = StringField(u'用户名', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点、下划线')])
-    password = PasswordField(u'密码', validators=[Required()])
+    password = PasswordField(u'密码')
 
     role = SelectField(u'角色', coerce=int)
     confirmed = BooleanField(u'是否验证邮箱')
@@ -50,3 +50,7 @@ class EditProfileAdminForm(Form):
 class PostForm(Form):
     body = PageDownField(u'写下你的心情吧', validators=[Required()])
     submit = SubmitField(u'提交')
+
+class CommentForm(Form):
+    body = StringField('', validators=[Required()])
+    submit = SubmitField(u'提交评论')

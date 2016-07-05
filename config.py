@@ -20,9 +20,11 @@ class DevelopmentConfig(Config):
 	MAIL_USE_TLS = True
 	MAIL_USERNAME = 'glrh11@163.com'
 	MAIL_PASSWORD = 'woshishouquanma1' #'os.environ.get('MAIL_PASSWORD')'
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+	# SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+	SQLALCHEMY_DATABASE_URI = 'mysql://root:qwe123@123.56.250.233:3306/flask-test'
 	FLASKY_POSTS_PER_PAGE = 20
 	FLASKY_FOLLOWERS_PER_PAGE = 20
+	FLASKY_COMMENTS_PER_PAGE = 10
 	# QINIU related
 	QINIU_ACCESS_KEY = 'NLbTTwY2zwZBHIh6sIdzlVruMV-eUDkXUnw-Ko87'
 	QINIU_SECRET_KEY = 'LHCPI62Exu9m1W7zpwOzbqMSvm21hXGgjk4uXWo7'
