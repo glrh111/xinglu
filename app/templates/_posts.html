@@ -1,51 +1,63 @@
-<ul class="list-group">
+{# 新的 #}
+<div class="bs-example posts">
 
 {% for post in posts %}
     
-    <li class="list-group-item">
-        {# 每一篇文章的标题 #}
-        <h4 class="list-group-item-heading">
+    <div class="media">
+        {# 左侧的头像栏目 #}
+        <div class="media-left media-top">
             {# 显示作者姓名并添加链接 #}
-            <a href="{{ url_for('main.user', username=post.author.username) }}" >
-                <span class="label label-primary">
-                    {{ post.author.name }}
-                </span>
+            <a href="{{ url_for('main.user', username=post.author.username) }}">
+              <img class="media-object" src="{{ post.author.head_portrait }}" alt="64x64">
             </a>
+        </div>
+        
+        {# 右侧的文章信息 #}
+        <div class="media-body">
+        {# 每一篇文章的标题 #}
+        <h4 class="media-heading">
+            <button class="btn btn-default">
+                    {{ post.author.name }} 
+            </button>
             |
             {# 显示评论条数 #}
             <a href="{{ url_for('main.post', id=post.id) }}#comments">
-                <span class="label label-primary">
-                    评论：{{ post.comments.count() }} 
-                </span>
+                <button class="btn btn-default">
+                    评论 <span class="badge">{{ post.comments.count() }}</span>
+                </button>
             </a>
-            {#  #}
+            {# 显示修改或管理员修改 #}
             {% if current_user == post.author and not current_user.is_administrator() %}    
             |          
             <a href="{{ url_for('main.edit_post', id=post.id) }}">
-                <span class="label label-primary">
+                <button class="btn btn-default">
                     修改
-                </span>
+                </button>
             </a>
             {% endif %}
             {# 管理员执行管理员修改 #}
             {% if current_user.is_administrator() %}
             |
             <a href="{{ url_for('main.edit_post', id=post.id) }}">
-                <span class="label label-primary">
+                <button class="btn btn-default">
                     管理员修改
-                </span> 
+                </button> 
             </a>
             {% endif %}
         </h4>
         {# 评论内容 #}
-        <p class="list-group-item-text">
+        {# <p class=""> #}
+        {# <br /> #}
+        {# <div class="well list-group-item-text"> #}
             {% if post.body_html %}
                 {{ post.body_html | safe }}
             {% else %}
                 {{ post.body }}
             {% endif %}
-        </p>
-    </li>
+        </div>
+        {# </p> #}
+        {# </div> #}
+    </div>
 {% endfor %}
 
-</ul>
+</div>

@@ -1,3 +1,64 @@
 body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     font-family: Microsoft YaHei, '宋体', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
 }
+
+/* footer展示相关的 */
+.bs-docs-footer {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-top: 100px;
+    color: #99979c;
+    text-align: left;
+    background-color: #2a2730
+}
+
+.bs-docs-footer a {
+    color: #fff
+}
+
+.bs-docs-footer-links {
+    padding-left: 0;
+    margin-bottom: 20px
+}
+
+.bs-docs-footer-links li {
+    display: inline-block
+}
+
+.bs-docs-footer-links li+li {
+    margin-left: 15px
+}
+
+/* 主页文章的展示 */
+.bs-example {
+    position: relative;
+    padding: 45px 15px 15px;
+    margin: 0 -15px 15px;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
+    -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,.05)
+}
+
+.bs-example:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "文章列表："
+}
+.posts .media-left img {
+    width: 64px; 
+    height: 64px;
+    border-radius: 32px
+}
+.navbar-right img {
+    width: 50px; 
+    height: 50px;
+    border-radius: 25px
+}

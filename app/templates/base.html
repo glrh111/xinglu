@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle"
@@ -40,7 +40,7 @@
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			{% if current_user.is_authenticated %}
-				<li><img class="img-rounded profile-thumbnail" src="{{ current_user.head_portrait }}"></li>
+				<li><img class="img-responsive img-rounded profile-thumbnail" src="{{ current_user.head_portrait }}"></li>
 				<li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ current_user.username }}</a></li>
 				<li><a href="{{ url_for('auth.logout') }}">退出</a></li>
 				}
@@ -50,7 +50,7 @@
 		</ul>
 	</div>
 </div>
-</div>
+</nav>
 {% endblock %}
 
 {% block content %}
@@ -70,13 +70,29 @@
 
 </div>
 
-<div id="footer" class="container">
-<nav class="navbar navbar-default navbar-fixed-bottom">
-    <div class="navbar-inner navbar-content-center">
-        <p class="text-muted credit" style="text-align:center;">
+{# <div id="footer">
+<nav class="navbar navbar-default navbar-static-bottom">
+    <div class="container-fluid">
+        <p class="navbar-text text-muted credit">
             Copyright&copy; 2016 glrh11 co.td All Rights Reserved
         </p>
     </div>
 </nav>
-</div>
+</div> #}
+
+<footer class="bs-docs-footer" role="contentinfo"> 
+	<div class="container"> 
+		<ul class="bs-docs-footer-links"> 
+			<li><a href="https://github.com/glrh111/flask2" target="_blank">GitHub</a></li>
+			<li><a href="{{ url_for('main.index') }}" target="_blank">主站</a></li>
+		</ul> 
+		<p>
+			页面设计全靠 <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> 和 <a href="https://google.com/" target="_blank">Google</a> 、 <a href="https://www.baidu.com/" target="_blank">百度</a> 。
+		</p> 
+		<p>
+			 Copyright&copy; 2016 glrh11 All Rights Reserved
+		</p>
+	</div> 
+</footer>
+
 {% endblock %}
