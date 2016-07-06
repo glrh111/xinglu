@@ -99,7 +99,7 @@ def edit_profile_admin(id):
             user.password = form.password.data
         # get role by id
         user.role = Role.query.get(form.role.data)
-        user.confirmed = form.confirmed.data
+        # user.confirmed = form.confirmed.data
 
         user.name = form.name.data
         user.location = form.location.data
@@ -113,7 +113,7 @@ def edit_profile_admin(id):
     form.password.data = ''
 
     form.role.data = user.role_id
-    form.confirmed.data = user.confirmed
+    # form.confirmed.data = user.confirmed
 
     form.name.data = user.name
     form.location.data = user.location
