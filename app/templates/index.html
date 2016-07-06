@@ -7,35 +7,36 @@
     {{ pagedown.include_pagedown() }}
 {% endblock %}
 
+
+
 {% block page_content %}
 
-{# 文章输入框框 #}
-<div class="page-header">
+    {# 文章输入框框 #}
+    <div class="page-header">
 
-{% if not current_user.is_authenticated %}
-<p>新用户请点击注册<a href="{{ url_for('auth.register') }}">注册</a></p>
-{% endif %}
+    {% if not current_user.is_authenticated %}
+    <p>请<a href="{{ url_for('auth.register') }}">注册</a>或<a href="{{ url_for('auth.login') }}">登录</a>以使用全部功能。</p>
+    {% endif %}
 
-<div>
-{% if  current_user.can(Permission.WRITE_ARTICLES) %}
-    {{ wtf.quick_form(form) }}
-{% endif %}
-</div>
+    <div>
+    {% if  current_user.can(Permission.WRITE_ARTICLES) %}
+        {{ wtf.quick_form(form) }}
+    {% endif %}
+    </div>
 
-</div>
-
-{# 只有登录的用户才显示，文章列表 #}
-{% if current_user.is_authenticated %}
-
-{# 文章列表 #}
-{% include "_posts.html" %}
+    </div>
 
 
-{# 页码 #}
-<div class="pagination">
-{{ macros.pagination_widget(pagination, 'main.index') }}
-</div>
+{# {% if current_user.is_authenticated %} #}
 
-{% endif %}
+    {# 文章列表 #}
+    {% include "_posts.html" %}
+
+    {# 页码 #}
+    <div class="pagination">
+    {{ macros.pagination_widget(pagination, 'main.index') }}
+    </div>
+
+{# {% endif %} #}
 
 {% endblock %}

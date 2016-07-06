@@ -2,11 +2,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
 
-{% block title %}
-    老王 - 文章
-{% endblock %}
-
-
 {% block page_content %}
 
 {# <div class="panel panel-default">
@@ -22,10 +17,11 @@
             {% endif %}
         </div>
 </div> #}
-    
+
     {# 显示文章信息 #}
-    <div class="list-group">
-        <a href="{{ url_for('main.user', username=post.author.username) }}" class="list-group-item active">
+    {# 文章的显示方式之一 #}
+{#     <div class="list-group">
+        <a href="{{ url_for('main.user', username=post.author.username) }}" class="list-group-item default">
             {{ post.author.name }}
         </a>
         <a href="#" class="list-group-item">
@@ -35,13 +31,84 @@
                 {{ post.body }}
             {% endif %}
         </a>
+    </div> #}
+
+<div class="page-header">
+
+    <div class="media comments">
+        {# 左侧的头像栏目 #}
+        <div class="media-left media-top">
+            {# 显示作者姓名并添加链接 #}
+            <a href="{{ url_for('main.user', username=post.author.username) }}">
+              <img class="media-object" src="{{ post.author.head_portrait }}">
+            </a>
+        </div>
+        
+        {# 右侧的文章信息 #}
+        <div class="media-body">
+        {# 每一篇文章的标题 #}
+        <h4 class="media-heading">
+            <button class="btn btn-default">
+                    {{ post.author.name }} 
+            </button>
+            
+
+            {# 显示修改或管理员修改 #}
+            {% if current_user == post.author and not current_user.is_administrator() %}    
+            |          
+            <a href="{{ url_for('main.edit_post', id=post.id) }}">
+                <button class="btn btn-default">
+                    修改
+                </button>
+            </a>
+            {% endif %}
+            {# 管理员执行管理员修改 #}
+            {% if current_user.is_administrator() %}
+            |
+            <a href="{{ url_for('main.edit_post', id=post.id) }}">
+                <button class="btn btn-default">
+                    管理员修改
+                </button>
+            </a>
+            {% endif %}
+        </h4>
+        {# 评论内容 #}
+        {# <p class=""> #}
+        {# <br /> #}
+        {# <div class="well list-group-item-text"> #}
+            {% if post.body_html %}
+                {{ post.body_html | safe }}
+            {% else %}
+                {{ post.body }}
+            {% endif %}
+        </div>
+        {# </p> #}
+        {# </div> #}
     </div>
 
-    {# 评论表单及评论列表 #}
-    {% if current_user.can(Permission.COMMENT) %}    
-        {{ wtf.quick_form(form) }}
-    {% endif %}
-    
+
+
+
+
+
+    {# 评论表单 #}
+        {% if current_user.can(Permission.COMMENT) %}    
+            {{ wtf.quick_form(form) }}
+        {% endif %}
+        
+
+        {# 没写好，数据库不能链接，艹 #}
+        <form>
+        <div class="input-append">
+
+        </div>
+        </form>
+
+</div>
+
+{# 外框 #}
+<div class="bs-example comments">
+    {# 评论列表 #}
     {% include "_comments.html" %}
     
 
@@ -51,5 +118,8 @@
     <div class="pagination">
     {{ macros.pagination_widget(pagination, 'main.post', id=post.id) }}
     </div>
+
+
+</div>
 
 {% endblock %}

@@ -40,8 +40,8 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
     box-shadow: inset 0 3px 6px rgba(0,0,0,.05)
 }
-
-.bs-example:after {
+/* 文章列表 */
+.posts:after {
     position: absolute;
     top: 15px;
     left: 15px;
@@ -52,13 +52,35 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     letter-spacing: 1px;
     content: "文章列表："
 }
-.posts .media-left img {
+/* 评论列表 */
+.comments:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "评论列表："
+}
+/* 文章左边的用户头像 */
+.media-left img {
     width: 64px; 
     height: 64px;
     border-radius: 32px
 }
+/* 导航栏的用户头像 */
 .navbar-right img {
     width: 50px; 
     height: 50px;
     border-radius: 25px
+}
+/* 首页左边的LOGO */
+.navbar-brand {
+    padding: 0px 15px;
+}
+/* 解决文章链接按钮 hover下划线问题 */
+.media-body a:hover {
+    text-decoration: none;
 }

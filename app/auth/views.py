@@ -12,8 +12,12 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		if user is None:
+			user = User.query.filter_by(username=form.email.data).first()
 		if user is not None and user.verify_password(form.password.data):
-			login_user(user, form.remember_me.data)
+			# login_user(user, form.remember_me.data)
+			# 是否保持登录
+			login_user(user, True) 
 			return redirect(request.args.get('next') or url_for('main.index'))
 		flash(u'用户名或密码错误')
 	return render_template('auth/login.html', form=form)
@@ -31,20 +35,21 @@ def register():
 	if form.validate_on_submit():
 		user = User(email=form.email.data, username=form.username.data, password=form.password.data)
 		db.session.add(user)
-		flash(u'注册成功，请登录')
+		flash(u'注册成功，登录以使用全部功能！')
 		return redirect(url_for('auth.login'))
 	return render_template('auth/register.html', form=form)
 
-@auth.route('/confirm/<token>')
-@login_required
-def confirm(token):
-	if current_user.confirmed:
-		return redirect(url_for('main.index'))
-	if current_user.confirm(token):
-		flash(u'已经验证成功，谢谢！')
-	else:
-		flash(u'你这个验证邮件不可用，请重新验证')
-	return redirect(url_for('main.index'))
+# 暂时不需要confirm 功能呢
+# @auth.route('/confirm/<token>')
+# @login_required
+# def confirm(token):
+# 	if current_user.confirmed:
+# 		return redirect(url_for('main.index'))
+# 	if current_user.confirm(token):
+# 		flash(u'已经验证成功，谢谢！')
+# 	else:
+# 		flash(u'你这个验证邮件不可用，请重新验证')
+# 	return redirect(url_for('main.index'))
 
 @auth.before_app_request
 def before_request():
@@ -55,17 +60,17 @@ def before_request():
 		# 	and request.endpoint != 'static':
 		# return redirect(url_for('auth.unconfirmed'))
 
-@auth.route('/unconfirmed')
-def unconfirmed():
-	if current_user.is_anonymous or current_user.confirmed:
-		return redirect(url_for('main.index'))
-	return render_template('auth/unconfirmed.html')
+# @auth.route('/unconfirmed')
+# def unconfirmed():
+# 	if current_user.is_anonymous or current_user.confirmed:
+# 		return redirect(url_for('main.index'))
+# 	return render_template('auth/unconfirmed.html')
 
-@auth.route('/confirm')
-@login_required
-def resend_confirmation():
-	token = current_user.generate_confirmation_token()
-	send_email(current_user.email, u'[确认邮箱]', 'auth/email/confirm', \
-		user=current_user, token=token)
-	flash(u'邮件已发至你邮箱，请看看' + token)
-	return redirect(url_for('main.index'))
+# @auth.route('/confirm')
+# @login_required
+# def resend_confirmation():
+# 	token = current_user.generate_confirmation_token()
+# 	send_email(current_user.email, u'[确认邮箱]', 'auth/email/confirm', \
+# 		user=current_user, token=token)
+# 	flash(u'邮件已发至你邮箱，请看看' + token)
+# 	return redirect(url_for('main.index'))

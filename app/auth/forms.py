@@ -6,9 +6,11 @@ from wtforms import ValidationError
 from ..models import User
 
 class LoginForm(Form):
-	email = StringField(u'电子邮箱', validators=[Required(), Length(1, 64), Email()])
+	# email, or username
+	email = StringField(u'电子邮箱', validators=[Required(), Length(1, 64)])
 	password = PasswordField(u'密码', validators=[Required()])
-	remember_me = BooleanField(u'保持登录')
+	# 保持登录这个功能比较鸡肋？
+	# remember_me = BooleanField(u'保持登录')
 	summit = SubmitField(u'登录')
 
 class RegisterForm(Form):

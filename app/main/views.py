@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, flash, request, current_app, jsonify
 
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm,\
+from .forms import EditProfileForm, EditProfileAdminForm,\
                 PostForm, CommentForm
 from .. import db
 from ..models import User, Role, Post, Comment
@@ -59,8 +59,6 @@ def moderator_only():
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first()
-    if user is None:
-        abort(404)
 
         # 分页功能
     page = request.args.get('page', 1, type=int)
