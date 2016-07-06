@@ -21,7 +21,8 @@ class DevelopmentConfig(Config):
 	MAIL_USERNAME = 'glrh11@163.com'
 	MAIL_PASSWORD = 'woshishouquanma1' #'os.environ.get('MAIL_PASSWORD')'
 	# SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
-	SQLALCHEMY_DATABASE_URI = 'mysql://root:qwe123@123.56.250.233:3306/flask-test'
+	# SQLALCHEMY_DATABASE_URI = 'mysql://root:qwe123@123.56.250.233:3306/flask-test'
+	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:qwe123@123.56.250.233:5432/xiangjianhuan'
 	FLASKY_POSTS_PER_PAGE = 20
 	FLASKY_FOLLOWERS_PER_PAGE = 20
 	FLASKY_COMMENTS_PER_PAGE = 10

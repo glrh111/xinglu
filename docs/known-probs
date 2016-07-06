@@ -27,3 +27,11 @@ yum install python-devel mysql-devel
 
 7. 文章列表后面，hover评论，有未知细线<div></div>出现（尚未解决）
 
+8. postgresql 配置
+http://blog.csdn.net/shanzhizi/article/details/46484481
+
+pg_hba.conf
+host    all             all             0.0.0.0/0         trust 
+
+postgresql.conf
+#listen_addresses = 'localhost' ＝》 "*"
