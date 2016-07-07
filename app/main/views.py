@@ -76,12 +76,15 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         current_user.name = form.name.data
+        if form.password:
+            current_user.password = form.password.data
         current_user.location = form.location.data 
         current_user.about_me = form.about_me.data 
         db.session.add(current_user)
         flash(u'资料修改成功~~')
         return redirect(url_for('.user', username=current_user.username))
     form.name.data = current_user.name
+    form.password.data = ''
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form)

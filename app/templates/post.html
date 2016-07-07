@@ -4,35 +4,6 @@
 
 {% block page_content %}
 
-{# <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{  }}</h3>
-      </div>
-
-        <div class="panel-body">
-            {% if post.body_html %}
-                {{ post.body_html | safe }}
-            {% else %}
-                {{ post.body }}
-            {% endif %}
-        </div>
-</div> #}
-
-    {# 显示文章信息 #}
-    {# 文章的显示方式之一 #}
-{#     <div class="list-group">
-        <a href="{{ url_for('main.user', username=post.author.username) }}" class="list-group-item default">
-            {{ post.author.name }}
-        </a>
-        <a href="#" class="list-group-item">
-            {% if post.body_html %}
-                {{ post.body_html | safe }}
-            {% else %}
-                {{ post.body }}
-            {% endif %}
-        </a>
-    </div> #}
-
 <div class="page-header">
 
     <div class="media comments">
@@ -49,7 +20,7 @@
         {# 每一篇文章的标题 #}
         <h4 class="media-heading">
             <button class="btn btn-default">
-                    {{ post.author.name }} 
+                    {{ post.author.name }}
             </button>
             
 
@@ -72,18 +43,15 @@
             </a>
             {% endif %}
         </h4>
-        {# 评论内容 #}
-        {# <p class=""> #}
-        {# <br /> #}
-        {# <div class="well list-group-item-text"> #}
+
+
             {% if post.body_html %}
                 {{ post.body_html | safe }}
             {% else %}
                 {{ post.body }}
             {% endif %}
         </div>
-        {# </p> #}
-        {# </div> #}
+
     </div>
 
 
@@ -92,22 +60,24 @@
 
 
     {# 评论表单 #}
-        {% if current_user.can(Permission.COMMENT) %}    
-            {{ wtf.quick_form(form) }}
-        {% endif %}
+    {# 丑的一比 #}
+    {% if current_user.can(Permission.COMMENT) %}    
+        {{ wtf.quick_form(form) }}
+    {% endif %}
         
 
         {# 没写好，数据库不能链接，艹 #}
-{#         <form>
-        <div class="input-append">
-
-        </div>
-        </form> #}
+        {# bootstrap2里面的，3好像不支持，艹 #}
+{#         <div class="input-append">
+          <input class="span2" id="appendedInputButton" type="text">
+          <button class="btn" type="button">评论</button>
+        </div> #}
 
 </div>
 
+
 {# 外框 #}
-<div class="bs-example comments">
+
     {# 评论列表 #}
     {% include "_comments.html" %}
     
@@ -119,7 +89,5 @@
     {{ macros.pagination_widget(pagination, 'main.post', id=post.id) }}
     </div>
 
-
-</div>
 
 {% endblock %}

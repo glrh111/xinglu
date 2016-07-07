@@ -38,3 +38,6 @@ postgresql.conf
 9. psycopg2 安装问题：pg_config 找不到
 yum install libpqxx-devel 
 yum install postgresql-devel
+
+10. 404页面为啥不能返回404，艹
+新写的404handler有问题。

@@ -8,8 +8,10 @@ from ..models import Role
 
 class EditProfileForm(Form):
     name = StringField(u'姓名', validators=[Length(0, 64)])
+    password = PasswordField(u'密码')
     location = StringField(u'位置', validators=[Length(0, 64)])
     about_me = TextAreaField(u'个人介绍')
+
     # 用户头像通过另外的实现
     # head_portrait = FileField(u'用户头像')
     submit = SubmitField(u'保存修改')

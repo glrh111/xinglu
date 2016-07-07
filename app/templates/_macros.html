@@ -1,5 +1,8 @@
 {% macro pagination_widget(pagination, endpoint) %}
+
+{% if pagination.pages>1 %}
     
+
 <ul class="pagination">
     {# 上一页的符号 &laquo; #}
     <li {% if not pagination.has_prev %} class="disabled"{% endif %}>
@@ -36,4 +39,7 @@
 
 </ul>
 
+{% endif %}
+
 {% endmacro %}
+
