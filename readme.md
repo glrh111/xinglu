@@ -13,6 +13,8 @@
 1. Config config.ini
 2. Start a uWSGI service
 
+`import flask`
+
 ## Nginx
 1. service nginx restart
 2. chkconfig nginx on
