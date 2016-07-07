@@ -41,3 +41,5 @@ yum install postgresql-devel
 
 10. 404页面为啥不能返回404，艹
 新写的404handler有问题。
+
+11. know about https://try.discourse.org/
