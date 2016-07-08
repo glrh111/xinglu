@@ -1,20 +1,23 @@
 # Deployment
-> Take [Centos](https://www.centos.org/) 6.4 as the basic environment.
-> Take `sudo` as the prefix of bash commands if necessary.
+
+> Use [Centos](https://www.centos.org/) 6.4 as the basic environment.
+> Use `sudo` before bash commands if necessary.
 
 ## 1. Install This App
-* Better update to Python2.7
+* Better update Python to Python2.7
 
 > Refer to this [article](http://yijiebuyi.com/blog/108ae6186bb00cc708bc54f02adec277.html).
 
 * Install [pip](https://pip.pypa.io/en/stable/) for Python2.7
-* Get the flask app from Github
+
+* Get this app from Github
 
 ```bash
 $ git clone http://github.com/glrh111/flask2.git
 ```
 
-* Build vitual environment
+* Build vitual environment for Flask
+
 ```bash
 $ cd /path/to/your/flask/root/dir
 $ chmod +x manage.py
@@ -45,10 +48,8 @@ $ source venv/bin/activate
 * Install PostgreSQL
 
 ```
-# add a related repo
 $ rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-6-x86_64/pgdg-centos94-9.4-1.noarch.rpm
 $ yum update
-# install
 $ yum install postgresql94-server postgresql94-contrib
 ```
 
@@ -89,9 +90,9 @@ psql> GRANT ALL PRIVILEGES ON DATABASE flask to flaskprod;
 psql> \q
 ```
 
-* Append the following lines `pg_hba.conf` of PostgreSQL
+* Append the following lines to `pg_hba.conf` of PostgreSQL
 
-> You may find this file follow this path: `/var/lib/postgres/9.4/data/pg_hba.conf`
+> You may find `pg_hba.conf` follow this path: `/var/lib/pgsql/9.4/data/pg_hba.conf`
 
 ```
 # allow all ipv4 for connecting to PostgreSQL
@@ -100,7 +101,7 @@ host all all 0.0.0.0/0 trust
 
 * Uncomment and modify the following lines in `pg_hba.conf` of PostgreSQL
 
-> You may find this file follow this path: `/var/lib/postgres/9.4/data/postgresql.conf`
+> You may find `pg_hba.conf` file follow this path: `/var/lib/pgsql/9.4/data/postgresql.conf`
 
 ```
 listen_addresses: '*'
@@ -127,9 +128,9 @@ $ service iptables restart
 
 ## 3. Create DB Tables
 
-> This app uses [SQLAlchemy](http://www.sqlalchemy.org/) as the orm for connecting with PostgresQL.
+> This app uses [SQLAlchemy](http://www.sqlalchemy.org/) as the orm for connecting to PostgreSQL.
 
-* Add the db infos to `config.py` in class `ProductionConfig`
+* Add DB infos to `config.py` in class `ProductionConfig`
 
 ```
 SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@hostname:5432/dbname'
@@ -139,10 +140,10 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@hostname:5432/dbname'
 
 ```
 # activite vitual env
-source venv/bin/activate
+$ source venv/bin/activate
 
 # enter flask shell
-./manage.py shell
+$ ./manage.py shell
 
 # create tables
 flask> db.create_all()
@@ -155,8 +156,29 @@ flask> ^D
 ```
 
 ## 4. Configure Nginx
-1. Config config.ini
-2. Start a uWSGI service
+
+* Append the following lines to the `http` block of `/etc/nginx/nginx.conf`
+
+```
+server {
+    listen 80;
+    server_name your_domain_name.com;
+    location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:8001;
+        uwsgi_param UWSGI_CHDIR /path/to/your/flask/root/dir;
+        uwsgi_param UWSGI_SCRIPT manage:app;
+        root html;
+        index index.html index.htm;
+    }
+}
+```
+
+* Restart `nginx` service
+
+```
+$ service nginx restart
+```
 
 ## 5. Configure uWSGI
 
@@ -176,12 +198,37 @@ wsgi-file = manage.py
 # app name in manage.py
 callable = app
 
-# nos of process
+# number of workers
 processes = 4
 
-# threads per process
+# add another thread for each process
 threads = 2
 
 # open an stats port
 stats = 127.0.0.1:9192
 ```
+
+## 6. Start engine
+
+* Activate vitual env
+
+```
+# activite vitual env
+$ source venv/bin/activate
+```
+
+* Export some environment variabals
+
+```
+<venv>$ FLASK_CONFIG = 'production'
+<venv>$ export FLASK_CONFIG
+```
+
+* Run
+
+```
+<venv>$ ./manage.py runserver
+```
+
+> Now that the whole world could access to your zone.
+> Exciting!
