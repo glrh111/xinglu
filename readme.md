@@ -92,16 +92,16 @@ psql> \q
 
 * Append the following lines to `pg_hba.conf` of PostgreSQL
 
-> You may find `pg_hba.conf` follow this path: `/var/lib/pgsql/9.4/data/pg_hba.conf`
+> You may find `pg_hba.conf` following this path: `/var/lib/pgsql/9.4/data/pg_hba.conf`
 
 ```
 # allow all ipv4 for connecting to PostgreSQL
 host all all 0.0.0.0/0 trust
 ```
 
-* Uncomment and modify the following lines in `pg_hba.conf` of PostgreSQL
+* Uncomment and modify the following lines in `postgresql.conf` of PostgreSQL
 
-> You may find `pg_hba.conf` file follow this path: `/var/lib/pgsql/9.4/data/postgresql.conf`
+> You may find `postgresql.conf` file following this path: `/var/lib/pgsql/9.4/data/postgresql.conf`
 
 ```
 listen_addresses: '*'
