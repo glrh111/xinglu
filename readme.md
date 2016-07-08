@@ -1,10 +1,10 @@
-# Development and Deployment
+# Deployment
 
-## Flask
-> Inner Communications in flask
+## 1. Flask
+1. Get this app
 > Package Dependency
 
-## PostgreSQL
+## 2. PostgreSQL
 1. ha...cnf
 > 0.0.0.0/0 trust
 2. listen:'*'
@@ -15,7 +15,7 @@
 
 `import flask`
 
-## Nginx
+## Nginx Configration
 1. service nginx restart
 2. chkconfig nginx on
 3. emacs /etc/nginx/nginx.conf

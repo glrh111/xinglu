@@ -28,24 +28,3 @@ uwsgi -x test_config.xml
 /etc/init.d/nginx start
 
 
-
-flask-script
-
-flask-bootstrap
-flask-moment
-flask-wtf
-
-flask-sqlalchemy
-
-flask-migrate 数据库迁移
-
-flask-mail
-
-flask-script
-
-认证：
-flask-login
-werkzeug
-itsdangerous
-
-
