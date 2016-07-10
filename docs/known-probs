@@ -43,3 +43,24 @@ yum install postgresql-devel
 新写的404handler有问题。
 
 11. know about https://try.discourse.org/
+
+12. bower
+install nodejs
+npm install -g bower  // global
+bower init
+bower install -S bootstrap-fileinput  // save it to bower.json
+bower install // install all dependencies from bower.json
+
+13. WTForms locale
+http://stackoverflow.com/questions/26039108/how-to-use-wtforms-po-with-flask-wtf
+
+add the following code to your app script
+
+  from flask.ext.babel import Babel
+  babel = Babel(app)
+  app.config['BABEL_DEFAULT_LOCALE'] = 'zh_Hans_CN'
+create babel.cfg next to your application:
+
+  [python: **.py]
+  [jinja2: **/templates/**.html]
+  extensions=jinja2.ext.autoescape,jinja2.ext.with_

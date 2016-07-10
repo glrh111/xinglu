@@ -7,10 +7,15 @@
     <h1>修改资料</h1>
 </div>
     
-<div class="col-md-4">
+<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+    {# 头像上传窗口 #}
+    <input id="input-id" type="file" class="file" data-preview-file-type="text">
 
     {{ wtf.quick_form(form) }}
 
 </div>
+
+
 
 {% endblock %}

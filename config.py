@@ -7,6 +7,8 @@ class Config:
 	FLASK_MAIL_SUBJECT_PREFIX = '[glrh11]'
 	FLASK_MAIL_SENDER = 'glrh11 <glrh11_test@163.com>'
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN') or 'glrh11_test@163.com'
+	# locale
+	BABEL_DEFAULT_LOCALE = 'zh_Hans_CN'
 
 
 	@staticmethod

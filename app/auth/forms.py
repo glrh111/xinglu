@@ -7,7 +7,7 @@ from ..models import User
 
 class LoginForm(Form):
 	# email, or username
-	email = StringField(u'电子邮箱', validators=[Required(), Length(1, 64)])
+	email = StringField(u'电子邮箱/用户名', validators=[Required(), Length(1, 64)])
 	password = PasswordField(u'密码', validators=[Required()])
 	# 保持登录这个功能比较鸡肋？
 	# remember_me = BooleanField(u'保持登录')

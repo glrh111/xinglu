@@ -22,3 +22,5 @@ Werkzeug==0.11.9
 mysql
 qiniu
 psycopg2
+flask-bower
+flask-babel

@@ -37,12 +37,16 @@
         <td>
             {% if current_user.can(Permission.FOLLOW) and follower != current_user %}
                 {% if not current_user.is_following(follower) %}
-                    <a href="{{ url_for('main.follow', username=follower.username) }}" class="btn btn-primary">关注</a>
+                    <a href="{{ url_for('main.follow', username=follower.username) }}" class="btn btn-success">关注</a>
                 {% else %}
-                    <a href="{{ url_for('main.unfollow', username=follower.username) }}" class="btn btn-primary">取消关注</a>
+                    <a href="{{ url_for('main.unfollow', username=follower.username) }}" class="btn btn-default">取消关注</a>
                 {% endif %}
             {% else %}
-                <a href="#" class="btn btn-active">本人</a>
+                {% if follower == current_user %}
+                    <a href="#" class="btn btn-danger">本人</a>
+                {% else %}
+                    <a href="#" class="btn btn-success" disabled="disabled">关注</a>
+                {% endif %}
             {% endif %}
         </td>
     </tr>

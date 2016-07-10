@@ -1,0 +1,20 @@
+{
+  "name": "flask2",
+  "homepage": "https://github.com/glrh111/flask2",
+  "authors": [
+    "glrh11 <glrh11@163.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-fileinput": "^4.3.3"
+  }
+}
