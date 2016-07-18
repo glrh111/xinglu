@@ -10,9 +10,14 @@ def generate_upload_filename(ext, prefix='content'):
     prefix : head, content(default)
     filename : prefix - ctime - ext
     '''
-    return prefix + time.ctime() + '.' + ext
+    return prefix + '-' + time.ctime() + '.' + ext
 
-def upload_image(prefix, abspath):
+def generate_upload_token(prefix, localfile):
+    '''
+    prefix: 'head' or 'content'
+    return: (token, key)
+    '''
+
     # modify default upload zone
     qiniu.config.set_default(default_zone=qiniu.config.zone1)
 
@@ -24,12 +29,9 @@ def upload_image(prefix, abspath):
     # upload bucket name
     bucket_name = current_app.config['QINIU_BUCKET_NAME']
 
-    # local file path - absolute path
-    localfile = abspath
-
     # achieve file ext name
     try:
-        match = re.finditer(r'.([0-9a-zA-Z]+)$')
+        match = re.finditer(r'.([0-9a-zA-Z]+)$', localfile)
         ext = match[-1].group(1)
     except:
         ext = 'jpg'
@@ -39,9 +41,20 @@ def upload_image(prefix, abspath):
     # generate token
     token = q.upload_token(bucket_name, key, 3600)
 
+    return token, key
+
+def upload_image(prefix, localfile):
+    '''
+    prefix: 'head' or 'content', and content by default
+    abspath: abspath of localfile
+    '''
+
+    token, key = generate_upload_token(prefix, localfile)
+
     # upload
     ret, info = put_file(token, key, localfile)
     # generate img src
     img_src = current_app.config['QINIU_PATH_PREFIX'] + key
 
     return img_src, ret['key']==key
+

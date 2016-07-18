@@ -64,3 +64,8 @@ create babel.cfg next to your application:
   [python: **.py]
   [jinja2: **/templates/**.html]
   extensions=jinja2.ext.autoescape,jinja2.ext.with_
+
+
+14. Navicat 激活的问题
+http://www.jianshu.com/p/b1f9194e1e31
+谨记谨记

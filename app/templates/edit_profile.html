@@ -1,6 +1,27 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block scripts %}
+{{ super() }}
+
+<script type="text/javascript">
+    $("#input-headportrait").fileinput({
+      language: 'zh',
+      uploadUrl: "{{ url_for('main.upload_head', username=user.username) }}",
+      allowedFileExtensions: ['jpg', 'gif', 'png'],
+      showUpload: true,
+      previewFileType:'any',
+      browseClass: "btn btn-default", //按钮样式  
+      uploadExtraData:{"id": 1, "fileName":'123.mp3'},  
+      maxFileCount: 10,  
+    });
+
+</script>
+
+{% endblock %}
+
+
+
 {% block page_content %}
 
 <div class="page-header">
@@ -8,14 +29,12 @@
 </div>
     
 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
+    <p id="input-headportrait-p"></p>
     {# 头像上传窗口 #}
-    <input id="input-id" type="file" class="file" data-preview-file-type="text">
+    <input id="input-headportrait" type="file" class="file" data-preview-file-type="text">
 
     {{ wtf.quick_form(form) }}
 
 </div>
-
-
 
 {% endblock %}

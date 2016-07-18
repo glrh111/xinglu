@@ -24,3 +24,5 @@ qiniu
 psycopg2
 flask-bower
 flask-babel
+urllib3
+utils

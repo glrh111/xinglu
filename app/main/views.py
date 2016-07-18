@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, request, current_app, jsonify
+from flask import render_template, session, redirect, url_for, flash, request,\
+                  current_app, jsonify
 
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm,\
@@ -11,6 +12,8 @@ from ..models import User, Role, Post, Comment
 from ..decorators import admin_required, permission_required
 from ..models import Permission 
 from flask.ext.login import login_required, current_user
+
+import json
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -121,7 +124,7 @@ def edit_profile_admin(id):
     form.name.data = user.name
     form.location.data = user.location
     form.about_me.data = user.about_me
-    return render_template('edit_profile.html', form=form)
+    return render_template('edit_profile.html', form=form, user=user)
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
@@ -221,10 +224,14 @@ def followers(username):
 from ..helpers import upload_image
 @main.route('/upload-head/<username>')
 @login_required
-@permission_required(Permission.WRITE_ARTICLES)
 def upload_head(username):
+    # get head_img_name by ajax
+    head_img_name = request.args.get('head_img_name', '', type=str)
+
+    # get user who is going to change his head_portrait
     user = User.query.filter_by(username=username).first()
 
+    # user is None
     if user is None:
         flash(u'该用户不存在')
         return redirect(url_for('main.user_list'))
@@ -233,14 +240,17 @@ def upload_head(username):
         flash(u'你没有权限修改他人的头像信息')
         return redirect('main.user', username=user.username)
 
-    # upload image and 
-    img_src, status = upload_image('head', 'c:/7586558412942142611.jpg')
+    # json return jsonify
+    # if user is None:
+    #     return jsonify(result=json.dumps(result, encoding='utf-8'))
+
+    # upload image and get status
+    img_src, status = upload_image('head', head_img_name)
 
     if status:
         # uploaded success
         tag = u'头像上传成功'
         # update to db
-        print img_src
         user.head_portrait = img_src
         db.session.add(user)
     else:
@@ -248,11 +258,18 @@ def upload_head(username):
         tag = u'头像上传失败'
 
     flash(tag)
-    return redirect(url_for('main.user', username=user.username))
 
-@main.route('/uptoken')
-def uptoken():
-    pass
+    return jsonify(result=json.dumps({'id':1, }, encoding='utf-8'))
+
+from ..helpers import generate_upload_token
+@main.route('/upload-token/<prefix>')
+def upload_token(prefix):
+    token, key = generate_upload_token(prefix, 'c:/7586558412942142611.jpg')
+    result = {
+        'token': token,
+        'key': key,
+    }
+    return jsonify(result=json.dumps(result, encoding='utf-8'))
     # 不知道得用什么格式的json
     # return jsonify(result=json.dumps(result, encoding='utf-8'))
 
