@@ -5,17 +5,16 @@
 {{ super() }}
 
 <script type="text/javascript">
-    $("#input-headportrait").fileinput({
-      language: 'zh',
-      uploadUrl: "{{ url_for('main.upload_head', username=user.username) }}",
-      allowedFileExtensions: ['jpg', 'gif', 'png'],
-      showUpload: true,
-      previewFileType:'any',
-      browseClass: "btn btn-default", //按钮样式  
-      uploadExtraData:{"id": 1, "fileName":'123.mp3'},  
-      maxFileCount: 10,  
-    });
-
+    // $("#input-headportrait").fileinput({
+    //   language: 'zh',
+    //   uploadUrl: "{{ url_for('main.upload_head', username=user.username) }}",
+    //   allowedFileExtensions: ['jpg', 'gif', 'png'],
+    //   showUpload: true,
+    //   previewFileType:'any',
+    //   browseClass: "btn btn-default", //按钮样式  
+    //   uploadExtraData:{"id": 1, "fileName":'123.mp3'},  
+    //   maxFileCount: 10,  
+    // });
 </script>
 
 {% endblock %}
@@ -31,7 +30,22 @@
 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
     <p id="input-headportrait-p"></p>
     {# 头像上传窗口 #}
-    <input id="input-headportrait" type="file" class="file" data-preview-file-type="text">
+    {# <input id="input-headportrait" type="file" class="file" data-preview-file-type="text"> #}
+
+    {# 只有自己可以修改自己的头像，管理员都不行，哈哈 #}
+    {% if current_user == user %}
+    
+      <div id="upload_head_container">
+        {# 拖拽上传区域 #}
+        <div  id="upload_head_drop"></div>
+        {# 上传按钮 #}
+        <button id="upload_head_button" class="btn btn-default">上传头像</button>
+        <label id="upload_message"></label>
+      </div>
+      <br>
+    {% endif %}
+
+
 
     {{ wtf.quick_form(form) }}
 

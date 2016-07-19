@@ -52,7 +52,8 @@ class Follow(db.Model):
 		primary_key=True)
 	followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), \
 		primary_key=True)
-	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+	# change utcnow to ctime
+	timestamp = db.Column(db.DateTime, default=datetime.now)
 
 
 class Permission:
@@ -89,7 +90,7 @@ class User(db.Model, UserMixin):
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 	# 用户头像的七牛cdn 链接
-	head_portrait = db.Column(db.String(128), default='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+	head_portrait = db.Column(db.String(128))
 
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 
@@ -162,7 +163,7 @@ class User(db.Model, UserMixin):
 
 	# 刷新最后登录时间 last_seen
 	def ping(self):
-		self.last_seen = datetime.utcnow()
+		self.last_seen = datetime.now()
 		db.session.add(self)
 
 	# 生成虚拟用户
@@ -225,6 +226,8 @@ class Post(db.Model):
 	body_html = db.Column(db.Text)
 	# 评论相关的 field
 	comments = db.relationship('Comment', backref='post', lazy='dynamic')
+	# 文章删除字段
+	seenable = db.Column(db.Boolean, default=True)
 
 	# 生成虚拟文章post
 	@staticmethod
@@ -241,15 +244,18 @@ class Post(db.Model):
 					 author=u)
 			db.session.add(p)
 			db.session.commit()
-
+	# Refer: http://stackoverflow.com/questions/30105599/flask-and-jinja2-with-bleach-image-html-not-working
 	@staticmethod
 	def on_changed_body(target, value, oldvalue, initiator):
 		allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', \
 						'code', 'em', 'i', 'li', 'ol', 'pre', 'strong',\
-						'ul', 'h1', 'h2', 'h3', 'p']
+						'ul', 'h1', 'h2', 'h3', 'p', 'img']
+		allowed_attrs = {'*': ['class'],
+						 'a': ['href', 'rel'],
+						 'img': ['src', 'alt']}
 		target.body_html = bleach.linkify(bleach.clean(
 						markdown(value, output_format='html'),\
-						tags=allowed_tags, strip=True))
+						tags=allowed_tags, attributes=allowed_attrs, strip=True))
 
 # body 字段发生变化是，更新  body_html
 db.event.listen(Post.body, 'set', Post.on_changed_body)
@@ -278,6 +284,8 @@ class Comment(db.Model):
 	disabled = db.Column(db.Boolean)
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	# 评论删除相关
+	seenable = db.Column(db.Boolean, default=True)
 
 	@staticmethod
 	def on_changed_body(target, value, oldvalue, initiator):

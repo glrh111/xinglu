@@ -32,6 +32,12 @@
                     修改
                 </button>
             </a>
+            |
+            <a href="{{ url_for('main.delete_post', id=post.id) }}">
+                <button class="btn btn-active">
+                    删除
+                </button>
+            </a>
             {% endif %}
             {# 管理员执行管理员修改 #}
             {% if current_user.is_administrator() %}
@@ -79,8 +85,12 @@
 {# 外框 #}
 
     {# 评论列表 #}
-    {% include "_comments.html" %}
+    {# 空白的不显示 #}
+    {% if comments %}
     
+        {% include "_comments.html" %}
+
+    {% endif %}
 
 
 

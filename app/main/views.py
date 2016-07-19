@@ -25,7 +25,7 @@ def index():
 
     # 分页功能
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(\
+    pagination = Post.query.filter_by(seenable=True).order_by(Post.timestamp.desc()).paginate(\
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -65,7 +65,7 @@ def user(username):
 
         # 分页功能
     page = request.args.get('page', 1, type=int)
-    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(\
+    pagination = user.posts.filter_by(seenable=True).order_by(Post.timestamp.desc()).paginate(\
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -90,7 +90,7 @@ def edit_profile():
     form.password.data = ''
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', form=form)
+    return render_template('edit_profile.html', form=form, user=current_user._get_current_object())
 
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -145,7 +145,7 @@ def post(id):
         page = (post.comments.count()-1) / \
                 current_app.config['FLASKY_COMMENTS_PER_PAGE']+1
 
-    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(\
+    pagination = post.comments.filter_by(seenable=True).order_by(Comment.timestamp.asc()).paginate(\
         page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
@@ -169,6 +169,29 @@ def edit_post(id):
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
+@main.route('/delete-post/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_post(id):
+    post = Post.query.get_or_404(id)
+    if current_user != post.author and\
+            not current_user.can(Permission.ADMINISTER):
+        abort(403)
+    post.seenable = False
+    db.session.add(post)
+    flash(u'成功删除文章！')
+    return redirect(url_for('main.user', username=post.author.username))
+
+@main.route('/delete-comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_comment(id):
+    comment = Comment.query.get_or_404(id)
+    if current_user != comment.author and\
+            not current_user.can(Permission.ADMINISTER):
+        abort(403)
+    comment.seenable = False
+    db.session.add(comment)
+    flash(u'成功删除评论！')
+    return redirect(url_for('main.post', id=comment.post_id))
 
 # 关注相关
 @main.route('/follow/<username>')
@@ -261,15 +284,32 @@ def upload_head(username):
 
     return jsonify(result=json.dumps({'id':1, }, encoding='utf-8'))
 
+# generate token
 from ..helpers import generate_upload_token
 @main.route('/upload-token/<prefix>')
+@login_required
 def upload_token(prefix):
-    token, key = generate_upload_token(prefix, 'c:/7586558412942142611.jpg')
-    result = {
-        'token': token,
-        'key': key,
-    }
-    return jsonify(result=json.dumps(result, encoding='utf-8'))
-    # 不知道得用什么格式的json
-    # return jsonify(result=json.dumps(result, encoding='utf-8'))
+    token = generate_upload_token(prefix)
+    return jsonify(uptoken=token)
 
+# save head url to db
+@main.route('/save-head-to-db', methods=['GET', 'POST'])
+@login_required
+def save_head_to_db():
+    head_url = request.args.get('head_url', '', type=str)
+    if head_url:
+        current_user.head_portrait = head_url + '-headPortraitCrop'
+        db.session.add(current_user)
+        return jsonify(status_code=1)
+    return jsonify(status_code=0)
+
+# save head url to db
+# @main.route('/save-content-to-db', methods=['GET', 'POST'])
+# @login_required
+# def save_content_to_db():
+#     head_url = request.args.get('content_url', '', type=str)
+#     if head_url:
+#         current_user.head_portrait = head_url + '-headPortraitCrop'
+#         db.session.add(current_user)
+#         return jsonify(status_code=1)
+#     return jsonify(status_code=0)

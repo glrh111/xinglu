@@ -3,9 +3,9 @@
 <div class="list-group">
 
 {% for comment in comments %}
-    <a href="#" class="list-group-item">
+    <div href="#" class="list-group-item">
         {# 评论标题 #}
-        <h4 class="list-group-item-heading">{{ comment.author.name }}：</h4>
+        <h4 class="list-group-item-heading">{{ comment.author.name }} {% if current_user == comment.author and not current_user.is_administrator() %}<a href="{{ url_for('main.delete_comment', id=comment.id) }}" class="btn btn-active">删除</a>{% endif %}：</h4>
         {# 评论内容 #}
         <p class="list-group-item-text">
             {% if comment.body_html %}
@@ -13,8 +13,10 @@
             {% else %}
                 {{ comment.body }}
             {% endif %}
+            
         </p>
-    </a>
+
+    </div>
 {% endfor %}
 
 </div>

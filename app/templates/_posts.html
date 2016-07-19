@@ -34,6 +34,12 @@
                     修改
                 </button>
             </a>
+            |
+            <a href="{{ url_for('main.delete_post', id=post.id) }}">
+                <button class="btn btn-active">
+                    删除
+                </button>
+            </a>
             {% endif %}
             {# 管理员执行管理员修改 #}
             {% if current_user.is_administrator() %}
@@ -41,7 +47,7 @@
             <a href="{{ url_for('main.edit_post', id=post.id) }}">
                 <button class="btn btn-default">
                     管理员修改
-                </button> 
+                </button>
             </a>
             {% endif %}
         </h4>

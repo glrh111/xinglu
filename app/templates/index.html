@@ -21,11 +21,20 @@
     <div>
     {% if  current_user.can(Permission.WRITE_ARTICLES) %}
         {{ wtf.quick_form(form) }}
-    {% endif %}
-    </div>
+        <br>
+        <div id="upload_content_container">
+            {# 上传按钮 #}
+            <button id="upload_content_button" class="btn btn-default">上传图片</button>
+            <label id="upload_message"></label>
+        </div>
+        
+        <br>
+    
 
     <p>使用 <a href="https://www.zybuluo.com/yinzhi6367/note/59158" target="_blank">Markdown</a> 驱动。</p>
 
+    {% endif %}
+    </div>
     </div>
 
 

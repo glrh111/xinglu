@@ -50,7 +50,7 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     color: #959595;
     text-transform: uppercase;
     letter-spacing: 1px;
-    content: "文章列表："
+    content: "心情列表："
 }
 /* 评论列表 */
 .comments:after {
@@ -83,4 +83,10 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 /* 解决文章链接按钮 hover下划线问题 */
 .media-body a:hover {
     text-decoration: none;
+}
+
+.media-body img {
+    height: 200px;
+    margin: 2px;
+    border-radius: 2px;
 }

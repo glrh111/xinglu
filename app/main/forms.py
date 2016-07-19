@@ -51,4 +51,4 @@ class PostForm(Form):
 
 class CommentForm(Form):
     body = StringField('', validators=[Required()])
-    submit = SubmitField(u'阅')
+    submit = SubmitField(u'评论')

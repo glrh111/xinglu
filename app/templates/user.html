@@ -2,12 +2,6 @@
 {% block page_content %}
 {% import "_macros.html" as macros %}
 
-{% block scripts %}
-    {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/plupload/plupload.full.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/qiniu.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-{% endblock %}
 
 <div class='page-header'>
 
@@ -66,9 +60,9 @@
             <p>地址：{{ user.location }}</p>
         {% endif %}
 
-        {% if user.last_seen %}
+        {#    {% if user.last_seen %}
             <p>上次登录时间：{{ moment(user.last_seen).fromNow() }}</p>
-        {% endif %}
+        {% endif %} #}
 
         <p>
             邮件地址：<a href="mailto:{{ user.email }}">{{ user.email }}</a>

@@ -12,7 +12,7 @@ def generate_upload_filename(ext, prefix='content'):
     '''
     return prefix + '-' + time.ctime() + '.' + ext
 
-def generate_upload_token(prefix, localfile):
+def generate_upload_token(prefix):
     '''
     prefix: 'head' or 'content'
     return: (token, key)
@@ -37,11 +37,11 @@ def generate_upload_token(prefix, localfile):
         ext = 'jpg'
 
     # cloud filename
-    key = generate_upload_filename(ext, prefix=prefix)
+    # key = generate_upload_filename(ext, prefix=prefix)
     # generate token
-    token = q.upload_token(bucket_name, key, 3600)
+    token = q.upload_token(bucket_name, None, 3600)
 
-    return token, key
+    return token
 
 def upload_image(prefix, localfile):
     '''
