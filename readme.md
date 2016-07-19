@@ -1,6 +1,7 @@
 # Deployment
 
 > Use [Centos](https://www.centos.org/) 6.4 as the basic environment.
+>
 > Use `sudo` before bash commands if necessary.
 
 ## 1. Install This App
@@ -13,7 +14,7 @@
 * Get this app from Github
 
 ```bash
-$ git clone http://github.com/glrh111/flask2.git
+$ git clone https://github.com/glrh111/flask2.git
 ```
 
 * Build vitual environment for Flask
@@ -43,6 +44,7 @@ $ source venv/bin/activate
 ## 2. Install and Configure PostgreSQL
 
 > This app use [PostgreSQL](https://www.postgresql.org/) 9.4 as default DBMS.
+>
 > Refer to this [article](http://blog.csdn.net/shanzhizi/article/details/46484481).
 
 * Install PostgreSQL
@@ -221,7 +223,10 @@ $ source venv/bin/activate
 
 ```
 <venv>$ FLASK_CONFIG = 'production'
+# DB settings, something like this:
+<venv>$ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:qwe123@localhost:5432/xiangjianhuan'
 <venv>$ export FLASK_CONFIG
+<venv>$ export SQLALCHEMY_DATABASE_URI
 ```
 
 * Run
@@ -231,5 +236,5 @@ $ source venv/bin/activate
 ```
 
 > Now that the whole world could access to your zone.
-
+>
 > Exciting!
