@@ -230,7 +230,7 @@ $ source venv/bin/activate
 * Run
 
 ```
-<venv>$ ./manage.py runserver
+<venv>$ uwsgi config.ini
 ```
 
 > Now that the whole world could access to your zone.
