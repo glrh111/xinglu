@@ -25,3 +25,4 @@ qiniu
 psycopg2
 flask-bower
 flask-babel
+httpie
