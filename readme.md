@@ -222,11 +222,9 @@ $ source venv/bin/activate
 * Export some environment variabals
 
 ```
-<venv>$ FLASK_CONFIG = 'production'
+<venv>$ export FLASK_CONFIG = "production"
 # DB settings, something like this:
-<venv>$ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:qwe123@localhost:5432/xiangjianhuan'
-<venv>$ export FLASK_CONFIG
-<venv>$ export SQLALCHEMY_DATABASE_URI
+<venv>$ export SQLALCHEMY_DATABASE_URI = "postgresql://postgres:qwe123@localhost:5432/xiangjianhuan"
 ```
 
 * Run

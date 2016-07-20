@@ -8,7 +8,6 @@ Desktop.ini
 *.so
 *.egg
 *.egg-info
-dist
 build
 
 # DataBase
@@ -16,6 +15,6 @@ build
 
 # project
 /venv
-
+/migrations
 
 # My configurations:
