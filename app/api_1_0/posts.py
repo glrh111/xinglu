@@ -1,5 +1,5 @@
-from ..models import AnonymousUser, User, Post, Permission
-from flask import g, jsonify, request, current_app
+from ..models import AnonymousUser, User, Post, Permission, Comment
+from flask import g, jsonify, request, current_app, url_for
 from . import api
 from .authentication import auth
 from .decorators import permission_required
@@ -10,7 +10,7 @@ from .. import db
 @api.route('/posts/')
 def get_posts():
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.pagination(
+    pagination = Post.query.paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -20,7 +20,6 @@ def get_posts():
     nxt = None
     if pagination.has_next:
         nxt = url_for('api.get_posts', page=page+1, _external=True)
-    posts = Post.query.all()
     return jsonify({
         'posts': [post.to_json() for post in posts],
         'prev': prev, 
@@ -29,15 +28,15 @@ def get_posts():
         })
 
 @api.route('/posts/<int:id>')
-@auth.login_required
 def get_post(id):
     post = Post.query.get_or_404(id)
     return jsonify(post.to_json())
 
 # `POST` method is used to `insert` a new `resource`
+# create a new post by auth user.
 @api.route('/posts/', methods=['POST'])
 @permission_required(Permission.WRITE_ARTICLES)
-def new_posts():
+def new_post():
     post = Post.from_json(request.json)
     post.author = g.current_user
     db.session.add(post)
@@ -46,6 +45,7 @@ def new_posts():
            {'Location': url_for('api.get_post', id=post.id, _external=True)}
 
 # `PUT` method is used to `update` a `resource`
+# update a post
 @api.route('/posts/<int:id>', methods=['PUT'])
 @permission_required(Permission.WRITE_ARTICLES)
 def edit_post(id):
@@ -56,3 +56,26 @@ def edit_post(id):
     post.body = request.json.get('body', post.body)
     db.session.add(post)
     return jsonify(post.to_json())
+
+@api.route('/posts/<int:id>/comments/')
+def get_post_comments(id):
+    post = Post.query.get_or_404(id)
+    comments = post.comments
+    return jsonify({
+        'comments': [comment.to_json() for comment in comments],
+        'count': comments.count(),
+        })
+
+# `append` a new comment to this post
+@api.route('/posts/<int:id>/comments/', methods=['POST'])
+@permission_required(Permission.COMMENT)
+def new_post_comment(id):
+    post = Post.query.get_or_404(id)
+    comment = Comment.from_json(request.json)
+    comment.post = post
+    comment.author = g.current_user
+    db.session.add(comment)
+    db.session.commit()
+    return jsonify(comment.to_json()), 201, \
+           {'Location': url_for('api.get_comment', id=comment.id, _external=True)}
+

@@ -211,7 +211,7 @@ class User(db.Model, UserMixin):
 	# to dict
 	# keep `email` and `role` in secret
 	def to_json(self):
-		json_post = {
+		json_user = {
 			'url': url_for('api.get_user', id=self.id, _external=True),
 			'username': self.username,
 			'name': self.name,
@@ -223,16 +223,7 @@ class User(db.Model, UserMixin):
 			'posts': url_for('api.get_user_posts', id=self.id, _external=True),
 			'post_count': self.posts.count(),
 		}
-		return json_post
-
-	# create Post obj.
-	@staticmethod
-	def from_json(json_post):
-		body = json_post.get('body')
-		if body is None or body == '':
-			raise ValidationError('post does not have a body')
-		return Post(body=body)
-
+		return json_user
 
 	# print提供便利
 	def __repr__(self):
@@ -291,10 +282,18 @@ class Post(db.Model):
 			'body_html': self.body_html,
 			'timestamp': self.timestamp,
 			'author': url_for('api.get_user', id=self.author_id, _external=True),
-			'comments': url_for('api.get_comments', id=self.id, _external=True),
+			'comments': url_for('api.get_post_comments', id=self.id, _external=True),
 			'comment_count': self.comments.count(),
 		}
 		return json_post
+
+	# create Post obj.
+	@staticmethod
+	def from_json(json_post):
+		body = json_post.get('body')
+		if body is None or body == '':
+			raise ValidationError('post does not have a body')
+		return Post(body=body)
 
 # body 字段发生变化是，更新  body_html
 db.event.listen(Post.body, 'set', Post.on_changed_body)
@@ -332,6 +331,25 @@ class Comment(db.Model):
 		target.body_html = bleach.linkify(bleach.clean(
 						markdown(value, output_format='html'),\
 						tags=allowed_tags, strip=True))
+
+	def to_json(self):
+		json_comment = {
+			'url': url_for('api.get_comment', id=self.id, _external=True),
+			'body': self.body, 
+			'body_html': self.body_html,
+			'timestamp': self.timestamp,
+			'author': url_for('api.get_user', id=self.author_id, _external=True),
+			'post': url_for('api.get_post', id=self.post_id, _external=True),
+		}
+		return json_comment
+
+	# create Post obj.
+	@staticmethod
+	def from_json(json_comment):
+		body = json_comment.get('body')
+		if body is None or body == '':
+			raise ValidationError('comment does not have a body')
+		return Comment(body=body)
 
 # body 字段发生变化是，更新  body_html
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
