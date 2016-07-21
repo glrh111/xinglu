@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest
 from app.models import User
 from flask import current_app
 from config import config
+from app import create_app, db
+from test import MyTestCase
 
-class UserModelTestCase(unittest.TestCase):
+class UserModelTestCase(MyTestCase):
+
 	def test_password_setter(self):
 		u = User(password='xiaoniao')
 		self.assertTrue(u.password_hash is not None)
@@ -27,18 +29,19 @@ class UserModelTestCase(unittest.TestCase):
 
 	# 默认权限相关
 	def test_default_permission(self):
-		u1 = User(email=current_app.config['FLASK_ADMIN'])
-		u2 = User(email='suibianxiede')
+		u1 = User.query.filter_by(email=current_app.config['FLASK_ADMIN']).first()
+		u2 = User(email='suibianxiede@111.com')
 		self.assertTrue(u1.role.name=='Administrator')
 		self.assertTrue(u2.role.name!='Administrator')
 
-	# 确认邮件相关
-	def test_confirmed_default(self):
-		u = User(password='suijide')
-		self.assertFalse(u.confirmed)
+	# 确认邮件相关，现在不要，落伍了
 
-	def test_confirmed_right(self):
-		u = User(password='suiyiqide')
-		token = u.generate_confirmation_token()
-		self.assertTrue(u.confirm(token))
-		self.assertTrue(u.confirmed)
+	# def test_confirmed_default(self):
+	# 	u = User(password='suijide')
+	# 	self.assertFalse(u.confirmed)
+
+	# def test_confirmed_right(self):
+	# 	u = User(password='suiyiqide')
+	# 	token = u.generate_confirmation_token()
+	# 	self.assertTrue(u.confirm(token))
+	# 	self.assertTrue(u.confirmed)
