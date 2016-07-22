@@ -27,3 +27,4 @@ flask-bower
 flask-babel
 httpie
 requests
+coverage
