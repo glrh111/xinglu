@@ -7,10 +7,9 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm,\
                 PostForm, CommentForm
 from .. import db
-from ..models import User, Role, Post, Comment
+from ..models import User, Role, Post, Comment, Permission 
 
 from ..decorators import admin_required, permission_required
-from ..models import Permission 
 from flask.ext.login import login_required, current_user
 
 import json

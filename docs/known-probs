@@ -78,3 +78,18 @@ http://axiaoxin.com/article/123/
 15. 电脑端，如果先输入post的文字，再上传图片，上传不上去，艹！！！
 
 17. 登录的用户容易掉线？在哪里设置
+
+18. httpie
+    ----GET
+    http --json --auth 123@123.com:111111 GET http://localhost:5000/api/v1.0/posts/?page=1
+
+    ----POST
+    http --json --auth 123@123.com:111111 POST http://localhost:5000/api/v1.0/posts/ "body=我喜欢你，嘿嘿。"
+    
+    ----PUT
+    http --json --auth 123@123.com:111111 PUT http://localhost:5000/api/v1.0/posts/1111 "body=我喜欢你，嘿嘿。"
+
+    ----TOKEN
+    http --json --auth 123@123.com:111111 GET http://localhost:5000/api/v1.0/token
+
+    http --json --auth token...: GET http://localhost:5000/api/v1.0/posts/
