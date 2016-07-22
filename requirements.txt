@@ -28,3 +28,4 @@ flask-babel
 httpie
 requests
 coverage
+selenium
