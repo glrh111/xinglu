@@ -312,3 +312,14 @@ def save_head_to_db():
 #         db.session.add(current_user)
 #         return jsonify(status_code=1)
 #     return jsonify(status_code=0)
+
+# for selenium tests
+@main.route('/shutdown')
+def server_shutdown():
+    if not current_app.testing:
+        abort(404)
+    shutdown = request.environ.get('werkzeug.server.shutdown')
+    if not shutdown:
+        abort(500)
+    shutdown()
+    return 'Shutting down...'
