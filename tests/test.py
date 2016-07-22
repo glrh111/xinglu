@@ -19,6 +19,7 @@ class MyTestCase(unittest.TestCase):
                   password='qwe123')
         db.session.add(u1)
         db.session.commit()
+        self.client = self.app.test_client(use_cookies=True)
 
     def tearDown(self):
         db.session.remove()

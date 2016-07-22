@@ -7,6 +7,11 @@ def forbidden(message):
     response.status_code = 403
     return response
 
+def bad_request(message):
+    response = jsonify({'error': 'bad request', 'message': message})
+    response.status_code = 400
+    return response
+    
 # now that this handler could catch this error through all routes
 @api.errorhandler(ValidationError)
 def validation_error(e):

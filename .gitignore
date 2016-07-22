@@ -16,5 +16,6 @@ build
 # project
 /venv
 /migrations
+/tmp
 
 # My configurations:
