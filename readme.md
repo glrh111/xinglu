@@ -1,3 +1,36 @@
+# Brief Introduction
+
+* You could register, log in or log out this site;
+* You could edit your own profile;
+* You could follow a registered user;
+* You could publish a post with pictures powered by markdown;
+* You could also comment below a specific post!
+
+# FrameWork
+
+> CentOS + Nginx + uWSGI + Flask + Python 
+
+# RESTful API Resources
+
+> Url structure: `http://hostname/api/<version>/route`
+>
+> Valid `<version>`: `v1.0`
+>
+> Access the below resources with authentication information, `http-auth` or `token` from `http://hostname/api/<version>/token`
+
+Resource URL | Method | Comment
+:--|:--:|--
+`/users/<int:id>`|`GET`|A user
+`/users/<int:id>/posts/`|`GET`|All posts by this user
+`/posts/`|`GET`|All posts with pagination
+`/posts/`|`POST`|Build a post by current authenticated user
+`/posts/<int:id>`|`GET`|A post
+`/posts/<int:id>`|`PUT`|Edit a post by current authenticated user
+`/posts/<int:id>/comments/`|`GET`|All comments bellow this post
+`/posts/<int:id>/comments/`|`POST`|Build a comment for this post by current authenticated user
+`/comments/`|`GET`|All comments with pagination
+`/comments/<int:id>`|`GET`|A comment
+
 # Deployment
 
 > Use [Centos](https://www.centos.org/) 6.4 as the basic environment.
@@ -224,7 +257,7 @@ $ source venv/bin/activate
 ```
 <venv>$ export FLASK_CONFIG = "production"
 # DB settings, something like this:
-<venv>$ export SQLALCHEMY_DATABASE_URI = "postgresql://postgres:qwe123@localhost:5432/xiangjianhuan"
+<venv>$ export SQLALCHEMY_DATABASE_URI = "postgresql://username:password@hostname:5432/dbname"
 ```
 
 * Run
