@@ -60,6 +60,13 @@
             {% else %}
                 {{ post.body }}
             {% endif %}
+{#             <br>
+            {{ moment(post.timestamp).format('LLL')}}
+            <br>
+            {{ moment().format('LLL') }} #}
+            <br>
+            {{ moment(post.timestamp).fromNow() }}
+
         </div>
         {# </p> #}
         {# </div> #}

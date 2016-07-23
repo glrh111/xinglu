@@ -1,14 +1,20 @@
+README
+---------------
+A brief introduction to the app
+
+Author : `glrh11`
+Email  : `glrh11@163.com`
+
+--------------------
+
 # Table of Content
 
-[toc]
-
-* [Brief Introduction](#Brief-Introduction)
-* [FrameWork](#FrameWork)
-* [Brief](#Brief)
+* [Brief Introduction](#brief-introduction)
+* [FrameWork](#framework)
+* [RESTful API Resources](#restful-api-resources)
+* [Deployment](#deployment)
 
 # Brief Introduction
-
-<h1 id="Brief">Ni Hao</h1>
 
 * You could register, log in or log out this site;
 * You could edit your own profile;
@@ -28,18 +34,18 @@
 >
 > Access the below resources with authentication information, `http-auth` or `token` from `http://hostname/api/<version>/token`
 
-|Resource URL|Method|Comment|
-|:---|:---:|---
-|`/users/<int:id>`|`GET`|A user
-|`/users/<int:id>/posts/`|`GET`|All posts by this user
-|`/posts/`|`GET`|All posts with pagination
-|`/posts/`|`POST`|Build a post by current authenticated user
-|`/posts/<int:id>`|`GET`|A post
-|`/posts/<int:id>`|`PUT`|Edit a post by current authenticated user
-|`/posts/<int:id>/comments/`|`GET`|All comments bellow this post
-|`/posts/<int:id>/comments/`|`POST`|Build a comment for this post by current authenticated user
-|`/comments/`|`GET`|All comments with pagination
-|`/comments/<int:id>`|`GET`|A comment
+|#|Resource URL|Method|Comment|
+|---:|:---|:---:|---
+|1|`/users/<int:id>`|`GET`|A user
+|2|`/users/<int:id>/posts/`|`GET`|All posts by this user
+|3|`/posts/`|`GET`|All posts with pagination
+|4|`/posts/`|`POST`|Build a post by current authenticated user
+|5|`/posts/<int:id>`|`GET`|A post
+|6|`/posts/<int:id>`|`PUT`|Edit a post by current authenticated user
+|7|`/posts/<int:id>/comments/`|`GET`|All comments bellow this post
+|8|`/posts/<int:id>/comments/`|`POST`|Build a comment for this post by current authenticated user
+|9|`/comments/`|`GET`|All comments with pagination
+|10|`/comments/<int:id>`|`GET`|A comment
 
 # Deployment
 

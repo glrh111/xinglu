@@ -31,6 +31,13 @@ class Config:
 	MAIL_USERNAME = 'glrh11@163.com'
 	MAIL_PASSWORD = 'woshishouquanma1' #'os.environ.get('MAIL_PASSWORD')'
 
+	# locale related
+	# Refer: https://phraseapp.com/blog/posts/python-localization-for-flask-applications/
+	LANGUAGES = {
+	    'en': 'English',
+	    'zh': 'Chinese',
+	}
+
 	@staticmethod
 	def init_app(app):
 		pass

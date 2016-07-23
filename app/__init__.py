@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
 from flask.ext.moment import Moment
@@ -8,7 +8,7 @@ from config import config
 from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 from flask.ext.bower import Bower
-from flask.ext.babel import Babel
+from flask.ext.babel import Babel, lazy_gettext
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -21,6 +21,11 @@ babel = Babel()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+# locale
+# Refer To : http://www.pythondoc.com/flask-mega-tutorial/i18n.html
+login_manager.login_message = lazy_gettext(\
+	'Please log in to access this page.')
+
 
 def create_app(config_name):
 	app = Flask(__name__)
@@ -34,6 +39,7 @@ def create_app(config_name):
 	pagedown.init_app(app)
 	bower.init_app(app)
 	babel.init_app(app)
+	app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
 
 
 	login_manager.init_app(app)

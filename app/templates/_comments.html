@@ -13,6 +13,9 @@
             {% else %}
                 {{ comment.body }}
             {% endif %}
+            <br>
+            <br>
+            {{ moment(comment.timestamp).fromNow() }}
             
         </p>
 

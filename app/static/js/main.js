@@ -250,3 +250,5 @@ var uploader = Q2.uploader({
     },
 
 });
+
+moment.locale('zh_CN');

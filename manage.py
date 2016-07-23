@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 import os
-from app import create_app, db, bower
+from app import create_app, db, bower, babel
 from app.models import User, Role, Post
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask import request
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -47,6 +48,10 @@ def test(coverage=False):
 @manager.command
 def deploy():
     pass
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
 
 if __name__ == '__main__':
 	manager.run()

@@ -54,7 +54,7 @@ class Follow(db.Model):
 	followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), \
 		primary_key=True)
 	# change utcnow to ctime
-	timestamp = db.Column(db.DateTime, default=datetime.now)
+	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 class Permission:
@@ -78,7 +78,7 @@ class User(db.Model, UserMixin):
 	__tablename__ = 'users'
 
 	id = db.Column(db.Integer, primary_key = True)
-	email = db.Column(db.String(64), unique=True, index=True)
+	email = db.Column(db.String(64))# unique=True, index=True)
 	username = db.Column(db.String(64), unique = True, index = True)
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 	password_hash = db.Column(db.String(128))
@@ -89,8 +89,8 @@ class User(db.Model, UserMixin):
 	about_me = db.Column(db.Text())
 	# default could accept func as arg, every time
 	# change utcnow to now
-	member_since = db.Column(db.DateTime(), default=datetime.now)
-	last_seen = db.Column(db.DateTime(), default=datetime.now)
+	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 	# 用户头像的七牛cdn 链接
 	head_portrait = db.Column(db.String(128))
 
@@ -165,7 +165,7 @@ class User(db.Model, UserMixin):
 
 	# 刷新最后登录时间 last_seen
 	def ping(self):
-		self.last_seen = datetime.now()
+		self.last_seen = datetime.utcnow()
 		db.session.add(self)
 
 	# 生成虚拟用户
