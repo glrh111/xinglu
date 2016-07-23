@@ -209,8 +209,8 @@ var uploader = Q2.uploader({
                var domain = up.getOption('domain');
                var res = JSON.parse(info);
                var source_link = 'http://' + domain + '/' +res.key; //获取上传成功后的文件的Url
-
-               $('textarea').html($('textarea').html()+'![](' + source_link + '-contentCrop' + ')');
+               t1 = document.getElementById("flask-pagedown-body");
+               t1.value += '![](' + source_link + '-contentCrop' + ')';
         },
         'Error': function(up, err, errTip) {
                //上传出错时，处理相关的事情

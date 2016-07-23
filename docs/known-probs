@@ -93,3 +93,6 @@ http://axiaoxin.com/article/123/
     http --json --auth 123@123.com:111111 GET http://localhost:5000/api/v1.0/token
 
     http --json --auth token...: GET http://localhost:5000/api/v1.0/posts/
+
+19. 登录时，用错误的密码登录，glrh11_test@163.com，会报错。
+    auth/register
