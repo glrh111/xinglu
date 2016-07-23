@@ -1,5 +1,4 @@
 # Brief Introduction
-------------
 
 * You could register, log in or log out this site;
 * You could edit your own profile;
@@ -8,12 +7,10 @@
 * You could also comment below a specific post!
 
 # FrameWork
---------------------
 
 > CentOS + Nginx + uWSGI + Flask + Python 
 
 # RESTful API Resources
--------------------
 
 > Url structure: `http://hostname/api/<version>/route`
 >
@@ -21,8 +18,8 @@
 >
 > Access the below resources with authentication information, `http-auth` or `token` from `http://hostname/api/<version>/token`
 
-|Resource URL | Method | Comment |
-|:--|:--:|--
+|Resource URL|Method|Comment|
+|:---|:---:|---
 |`/users/<int:id>`|`GET`|A user
 |`/users/<int:id>/posts/`|`GET`|All posts by this user
 |`/posts/`|`GET`|All posts with pagination
@@ -34,8 +31,19 @@
 |`/comments/`|`GET`|All comments with pagination
 |`/comments/<int:id>`|`GET`|A comment
 
+|语法|效果|
+|----|-----
+|`*斜体1*`|*斜体1*
+|`_斜体2_`|_斜体2_
+|`**粗体1**`|**粗体1**
+|`__粗体2__`|__粗体2__
+|`这是一个 ~~删除线~~`|这是一个 ~~删除线~~
+|`***斜粗体1***`|***斜粗体1***
+|`___斜粗体2___`|___斜粗体2___
+|`***~~斜粗体删除线1~~***`|***~~斜粗体删除线1~~***
+|`~~***斜粗体删除线2***~~`|~~***斜粗体删除线2***~~
+
 # Deployment
-------------------
 
 > Use [Centos](https://www.centos.org/) 6.4 as the basic environment.
 >
