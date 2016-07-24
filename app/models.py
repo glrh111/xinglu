@@ -78,11 +78,14 @@ class User(db.Model, UserMixin):
 	__tablename__ = 'users'
 
 	id = db.Column(db.Integer, primary_key = True)
-	email = db.Column(db.String(64))# unique=True, index=True)
+	email = db.Column(db.String(64), unique=True, index=True)
 	username = db.Column(db.String(64), unique = True, index = True)
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 	password_hash = db.Column(db.String(128))
-	confirmed = db.Column(db.Boolean, default=True)
+	# True - could access to website
+	confirmed = db.Column(db.Boolean, default=False)
+	# True - to be seen by admistrators
+	seenable = db.Column(db.Boolean, default=True)
 
 	name = db.Column(db.String(64))
 	location = db.Column(db.String(64))
@@ -180,7 +183,6 @@ class User(db.Model, UserMixin):
 			u = User(email=forgery_py.internet.email_address(),\
 					 username=forgery_py.internet.user_name(True),\
 					 password=forgery_py.lorem_ipsum.word(),\
-					 confirmed=True,\
 					 name=forgery_py.name.full_name(),\
 					 location=forgery_py.address.city(),\
 					 about_me=forgery_py.lorem_ipsum.sentence(),\

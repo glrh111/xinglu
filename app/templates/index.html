@@ -15,11 +15,13 @@
     <div class="page-header">
 
     {% if not current_user.is_authenticated %}
-    <p>请<a href="{{ url_for('auth.register') }}">注册</a>或<a href="{{ url_for('auth.login') }}">登录</a>以使用全部功能。</p>
+        <p>请<a href="{{ url_for('auth.register') }}">注册</a>或<a href="{{ url_for('auth.login') }}">登录</a>以使用全部功能。</p>
     {% endif %}
-
+    {% if current_user.is_authenticated and not current_user.confirmed %}
+        <p>请等待管理员审核以使用全部功能。</p>
+    {% endif %}
     <div>
-    {% if  current_user.can(Permission.WRITE_ARTICLES) %}
+    {% if current_user.confirmed and current_user.can(Permission.WRITE_ARTICLES) %}
         {{ wtf.quick_form(form) }}
         <br>
         <div id="upload_content_container">

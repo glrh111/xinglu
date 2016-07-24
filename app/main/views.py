@@ -37,7 +37,7 @@ def index():
 def user_list():
     # 分页相关
     page = request.args.get('page', 1, type=int)
-    pagination = User.query.order_by(User.id).paginate(\
+    pagination = User.query.filter_by(confirmed=True).order_by(User.id).paginate(\
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
         error_out=False)
     users = pagination.items

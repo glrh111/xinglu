@@ -23,7 +23,7 @@ class EditProfileAdminForm(Form):
             for role in Role.query.order_by(Role.name).all()]
         self.user = user
 
-    email = StringField(u'电子邮箱')#, validators=[Required(), Length(0, 64), Email()])
+    email = StringField(u'电子邮箱', validators=[Required(), Length(0, 64), Email()])
     username = StringField(u'用户名', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点、下划线')])
     password = PasswordField(u'密码')
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, request, url_for, flash, current_app
+from flask import render_template, redirect, request, \
+	url_for, flash, current_app, jsonify
 from . import auth
 from flask.ext.login import login_required, login_user, logout_user, \
 		current_user
@@ -7,6 +8,7 @@ from ..models import User
 from .. import db
 from .forms import LoginForm, RegisterForm
 from ..emails import send_email
+from ..decorators import admin_required
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -39,26 +41,49 @@ def register():
 			head_portrait=current_app.config['HEAD_PORTRAIT'], \
 			name=form.name.data)
 		db.session.add(user)
-		flash(u'注册成功，登录以使用全部功能！')
+		flash(u'注册成功，登录以查看是否审核通过！')
 		return redirect(url_for('auth.login'))
 	return render_template('auth/register.html', form=form)
 
 # 暂时不需要confirm 功能呢
-# @auth.route('/confirm/<token>')
-# @login_required
-# def confirm(token):
-# 	if current_user.confirmed:
-# 		return redirect(url_for('main.index'))
-# 	if current_user.confirm(token):
-# 		flash(u'已经验证成功，谢谢！')
-# 	else:
-# 		flash(u'你这个验证邮件不可用，请重新验证')
-# 	return redirect(url_for('main.index'))
+@auth.route('/confirm/<int:id>/<int:suggestion>')
+@login_required
+@admin_required
+def confirm(id, suggestion):
+	user = User.query.filter_by(id=id).first()
+	if user is None:
+		flash(u'用户尚未注册：%s' % user.username)
+	# confirmed = True: flash aready confirmed
+	if user.confirmed:
+		flash(u'用户已经通过审核：%s' % user.username)
+	# confirmed = False: 
+	else:
+		# suggestion = bool(request.args.get('suggestion'))
+		# request: True - confirmed = True
+		if suggestion == 1:
+			user.confirmed = True
+			flash(u'用户通过审核：%s' % user.username)
+		else:
+			user.seenable = False
+			flash(u'已删除用户：%s' % user.username)
+		db.session.add(user)
+	return redirect(url_for('auth.confirmer_list'))
+
+@auth.route('/confirmer-list')
+@login_required
+@admin_required
+def confirmer_list():
+	confirmers = User.query.filter_by(seenable=True).filter_by(confirmed=False).all()
+	return render_template('auth/confirmer_list.html', confirmers=confirmers)
 
 @auth.before_app_request
 def before_request():
 	if current_user.is_authenticated:
 		current_user.ping()
+		if not current_user.seenable:
+				logout_user()
+				flash(u'你未通过审核，已经退出系统！')
+				return redirect(url_for('main.index'))
 		# 	and not current_user.confirmed \
 		# 	and request.endpoint[:5] != 'auth.' \
 		# 	and request.endpoint != 'static':
@@ -66,9 +91,9 @@ def before_request():
 
 # @auth.route('/unconfirmed')
 # def unconfirmed():
-# 	if current_user.is_anonymous or current_user.confirmed:
-# 		return redirect(url_for('main.index'))
-# 	return render_template('auth/unconfirmed.html')
+# 	# if current_user.is_anonymous or current_user.confirmed:
+# 	# return render_template(url_for('auth/unconfirmed.html'))
+# 	# return render_template('auth/unconfirmed.html')
 
 # @auth.route('/confirm')
 # @login_required
