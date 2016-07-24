@@ -16,40 +16,8 @@
         <div class="media-body">
         {# 每一篇文章的标题 #}
         <h4 class="media-heading">
-            <button class="btn btn-default">
-                    {{ post.author.name }} 
-            </button>
-            |
-            {# 显示评论条数 #}
-            <a href="{{ url_for('main.post', id=post.id) }}#comments">
-                <button class="btn btn-default">
-                    评论 <span class="badge">{{ post.comments.count() }}</span>
-                </button>
-            </a>
-            {# 显示修改或管理员修改 #}
-            {% if current_user == post.author and not current_user.is_administrator() %}    
-            |          
-            <a href="{{ url_for('main.edit_post', id=post.id) }}">
-                <button class="btn btn-default">
-                    修改
-                </button>
-            </a>
-            |
-            <a href="{{ url_for('main.delete_post', id=post.id) }}">
-                <button class="btn btn-active">
-                    删除
-                </button>
-            </a>
-            {% endif %}
-            {# 管理员执行管理员修改 #}
-            {% if current_user.is_administrator() %}
-            |
-            <a href="{{ url_for('main.edit_post', id=post.id) }}">
-                <button class="btn btn-default">
-                    管理员修改
-                </button>
-            </a>
-            {% endif %}
+            {# 一组按钮 修改等等 #}
+            {% include "_post_edit_buttons.html" %}
         </h4>
         {# 评论内容 #}
         {# <p class=""> #}

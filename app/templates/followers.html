@@ -31,7 +31,7 @@
         <td>{{follower.name}}</td>
         <td><a href="{{ url_for('main.user', username=follower.username) }}">{{follower.username}}<a></td>
         <td>{{follower.email}}</td>
-        <td>{{follower.last_seen}}</td>
+        <td>{{moment(follower.last_seen).format('LLL')}}</td>
         <td>
             {% if current_user.can(Permission.FOLLOW) and follower != current_user %}
                 {% if not current_user.is_following(follower) %}

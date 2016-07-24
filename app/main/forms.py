@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField, TextAreaField, SelectField, \
     BooleanField, PasswordField, FileField
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
-from ..models import Role
+from ..models import Role, User
 
 class EditProfileForm(Form):
     name = StringField(u'姓名', validators=[Length(0, 64)])
@@ -23,7 +23,7 @@ class EditProfileAdminForm(Form):
             for role in Role.query.order_by(Role.name).all()]
         self.user = user
 
-    email = StringField(u'电子邮箱', validators=[Required(), Length(1, 64), Email()])
+    email = StringField(u'电子邮箱')#, validators=[Required(), Length(0, 64), Email()])
     username = StringField(u'用户名', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点、下划线')])
     password = PasswordField(u'密码')
 
@@ -35,10 +35,10 @@ class EditProfileAdminForm(Form):
     about_me = TextAreaField(u'个人介绍')
     submit = SubmitField(u'保存修改')
 
-    def validate_email(self, field):
-        if field.data != self.user.email and \
-            User.query.filter_by(email=field.data).first():
-            raise ValidationError(u'该邮箱已被使用，请更换邮箱注册或直接登录！')
+    # def validate_email(self, field):
+    #     if field.data != self.user.email and \
+    #         User.query.filter_by(email=field.data).first():
+    #         raise ValidationError(u'该邮箱已被使用，请更换邮箱注册或直接登录！')
 
     def validate_username(self, field):
         if field.data != self.user.username and \
