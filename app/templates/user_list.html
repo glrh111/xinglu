@@ -30,7 +30,7 @@
         <td>{{user.name}}</td>
         <td><a href="{{ url_for('main.user', username=user.username) }}">{{user.username}}<a></td>
         <td>{{user.email}}</td>
-        <td>{{user.last_seen}}</td>
+        <td>{{moment(user.last_seen).format('LLL')}}</td>
     </tr>
     {% endfor %}
     </tbody>

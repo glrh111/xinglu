@@ -19,61 +19,44 @@
         <div class="media-body">
         {# 每一篇文章的标题 #}
         <h4 class="media-heading">
-            <button class="btn btn-default">
-                    {{ user.name }} 
-            </button>
-            
-            {% if current_user.can(Permission.FOLLOW) and user != current_user %}
-            |
-                {% if not current_user.is_following(user) %}
-                    <a href="{{ url_for('main.follow', username=user.username) }}" class="btn btn-default">关注</a>
-                {% else %}
-                    <a href="{{ url_for('main.unfollow', username=user.username) }}" class="btn btn-default">取消关注</a>
-                {% endif %}
-            {% endif %}
-
-            |
-            
-            <a href="{{ url_for('main.followers', username=user.username) }}" class="btn btn-default">
-                粉丝: <span class="badge">{{ user.followers.count() }}</span>
-            </a>
-
-            
-
-            {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
-            |
-                <span class="label label-default">正在关注你</span>
-            {% endif %}
-
-            </h4>
+            {# 关注 - 粉丝数量等按钮 #}
+            {% include "_user_follow_buttons.html" %}
+        </h4>
        
         {# 评论内容 #}
         {# <p class=""> #}
         {# <br /> #}
         {# <div class="well list-group-item-text"> #}
-
-        {% if user.name %}
-        <p>姓名：{{ user.name }}</p>
-        {% endif %}
-
+        
+        {# 位置 #}
         {% if user.location %}
-            <p>地址：{{ user.location }}</p>
+            <p>
+                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;{{ user.location }}
+            </p>
         {% endif %}
 
-        {#    {% if user.last_seen %}
-            <p>上次登录时间：{{ moment(user.last_seen).fromNow() }}</p>
-        {% endif %} #}
+        {# 电子邮箱 #}
+        {% if user.email %}
+            <p>
+                <span class="glyphicon glyphicon-envelope"></span>&nbsp;{{ user.email }}
+            </p>
+        {% endif %}
+        
 
+        {# 上次登录时间 #}
+        {% if user.last_seen %}
+            <p>
+                <span class="glyphicon glyphicon-resize-small"></span>&nbsp;{{ moment(user.last_seen).fromNow() }}
+            </p>
+        {% endif %}
+
+        {# 个人介绍 #}
         <p>
-            邮件地址：<a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            {% if user.about_me %}
+            <span class="glyphicon glyphicon-sunglasses"></span>&nbsp;{{ user.about_me }}
+            {% endif %}
         </p>
 
-        {% if user == current_user and not current_user.is_administrator() %}
-            <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">修改资料</a>
-        {% endif %}
-        {% if current_user.is_administrator() %}
-            <a class="btn btn-default" href="{{ url_for('.edit_profile_admin', id=user.id) }}">管理员修改</a>
-        {% endif %}
 
         </div>  {# media body end #} 
     </div> {# media user end #}
