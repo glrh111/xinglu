@@ -10,7 +10,7 @@ class Config:
 	# locale
 	BABEL_DEFAULT_LOCALE = 'zh_Hans_CN'
 
-	HEAD_PORTRAIT = 'http://o9hjg7h8u.bkt.clouddn.com/icon2.png-headPortraitCrop'
+	HEAD_PORTRAIT = 'http://o9hjg7h8u.bkt.clouddn.com/icon_blue.png-headPortraitCrop'
 
 	# QINIU related
 	QINIU_ACCESS_KEY = 'NLbTTwY2zwZBHIh6sIdzlVruMV-eUDkXUnw-Ko87'
