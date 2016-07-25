@@ -40,9 +40,9 @@ def auth_error():
     return unauthorized('Invalid credentials')
 
 # all routes will auto auth through this
-# @api.before_request
-# @auth.login_required
-# def before_request():
-#     if g.current_user.is_anonymous:
-#         return forbidden('Not authorated')
+@api.before_request
+@auth.login_required
+def before_request():
+    if g.current_user.is_anonymous:
+        return forbidden('Not authorated')
 
