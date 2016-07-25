@@ -35,6 +35,28 @@
             </p>
         {% endif %}
 
+        {# 手机号码 #}
+        {% if user.phone_number %}
+            {# 本人，或者允许显示：显示手机号码 #}
+            {% if current_user == user or user.phone_number_seenable %}
+                <p>
+                    <span class="glyphicon glyphicon-phone"></span>&nbsp;{{ user.phone_number }}
+                
+                {# 如果是本人，显示修改按钮 #}
+                    {% if current_user == user %}
+                        <a href="{{url_for('main.phone_number_seenable_toggle', id=user.id)}}">
+                        {# 显示禁用按钮 #}
+                            {% if user.phone_number_seenable %}
+                                <span class="default glyphicon glyphicon-ban-circle"></span>
+                            {% else %}
+                                <span class="glyphicon glyphicon-globe"></span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </p>
+            {% endif %}
+        {% endif %}
+
         {# 电子邮箱 #}
         {% if user.email %}
             <p>

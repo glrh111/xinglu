@@ -36,7 +36,7 @@
     {% endif %}
     
     {# 管理员或本人执行删除功能 #}
-    {% if current_user == post.author or current_user.is_administrator() %}
+    {% if (current_user == post.author or current_user.is_administrator()) and post.comments.count()==0 %}
         
         <button class="btn btn-danger" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.delete_post', id=post.id) }}'">
                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

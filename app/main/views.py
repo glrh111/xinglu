@@ -80,6 +80,7 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password:
             current_user.password = form.password.data
+        current_user.phone_number = form.phone_number.data
         current_user.location = form.location.data 
         current_user.about_me = form.about_me.data 
         db.session.add(current_user)
@@ -87,6 +88,7 @@ def edit_profile():
         return redirect(url_for('.user', username=current_user.username))
     form.name.data = current_user.name
     form.password.data = ''
+    form.phone_number.data = current_user.phone_number
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form, user=current_user._get_current_object())
@@ -102,10 +104,10 @@ def edit_profile_admin(id):
         user.username = form.username.data
         if form.password:
             user.password = form.password.data
+        user.phone_number = form.phone_number.data
         # get role by id
         user.role = Role.query.get(form.role.data)
-        # user.confirmed = form.confirmed.data
-
+        user.confirmed = form.confirmed.data
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
@@ -116,9 +118,9 @@ def edit_profile_admin(id):
     form.email.data = user.email
     form.username.data = user.username
     form.password.data = ''
-
+    form.phone_number.data = user.phone_number
     form.role.data = user.role_id
-    # form.confirmed.data = user.confirmed
+    form.confirmed.data = user.confirmed
 
     form.name.data = user.name
     form.location.data = user.location
@@ -176,9 +178,12 @@ def delete_post(id):
     if current_user != post.author and\
             not current_user.can(Permission.ADMINISTER):
         abort(403)
-    post.seenable = False
-    db.session.add(post)
-    flash(u'成功删除文章！')
+    if not post.comments.count() == 0:
+        flash(u'文章包含评论，不能删除！')
+    else:
+        post.seenable = False
+        db.session.add(post)
+        flash(u'成功删除文章！')
     return redirect(url_for('main.user', username=post.author.username))
 
 @main.route('/delete-comment/<int:id>', methods=['GET', 'POST'])
@@ -242,6 +247,20 @@ def followers(username):
         endpoint='main.followers', pagination=pagination,\
         followers=followers)
 
+# 手机号码是否公开显示
+@main.route('/phone-number-seenable-toggle/<int:id>')
+@login_required
+def phone_number_seenable_toggle(id):
+    user = User.query.filter_by(id=id).first()
+    if user is None:
+        flash(u'该用户不存在')
+        return redirect(url_for('main.index'))
+    if user != current_user:
+        flash(u'不要尝试修改别人的资料')
+        return redirect(url_for('main.index'))
+    user.phone_number_seenable = not user.phone_number_seenable
+    db.session.add(user)
+    return redirect(url_for('main.user', username=user.username))
 
 # 上传文件相关
 from ..helpers import upload_image

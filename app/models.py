@@ -82,6 +82,10 @@ class User(db.Model, UserMixin):
 	username = db.Column(db.String(64), unique = True, index = True)
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 	password_hash = db.Column(db.String(128))
+	# phone_number
+	phone_number = db.Column(db.String)
+	# default: seenable to all confirmed users
+	phone_number_seenable = db.Column(db.Boolean, default=True)
 	# True - could access to website
 	confirmed = db.Column(db.Boolean, default=False)
 	# True - to be seen by admistrators
