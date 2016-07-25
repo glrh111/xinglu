@@ -80,10 +80,22 @@ def confirmer_list():
 def before_request():
 	if current_user.is_authenticated:
 		current_user.ping()
+		# 审核未通过，强制退出
 		if not current_user.seenable:
-				logout_user()
-				flash(u'你未通过审核，已经退出系统！')
+			logout_user()
+			flash(u'你未通过审核，已经退出系统！')
+			return redirect(url_for('main.index'))
+		if not current_user.confirmed:
+			if request.endpoint not in ['main.index', 'auth.logout']:
+				flash(u'管理员尚未审核，强迫你看首页！')
 				return redirect(url_for('main.index'))
+	# 未登录或未经审核，
+	else:
+		pass
+		# There accour a problem: redirect cause a css prob
+		# if not (request.endpoint == 'main.index'):
+		# 		flash(u'你未登录，强迫你看首页！')
+		# 		return redirect(url_for('main.index'))
 		# 	and not current_user.confirmed \
 		# 	and request.endpoint[:5] != 'auth.' \
 		# 	and request.endpoint != 'static':
@@ -92,7 +104,6 @@ def before_request():
 # @auth.route('/unconfirmed')
 # def unconfirmed():
 # 	# if current_user.is_anonymous or current_user.confirmed:
-# 	# return render_template(url_for('auth/unconfirmed.html'))
 # 	# return render_template('auth/unconfirmed.html')
 
 # @auth.route('/confirm')
