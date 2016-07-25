@@ -86,13 +86,15 @@ def before_request():
 			flash(u'你未通过审核，已经退出系统！')
 			return redirect(url_for('main.index'))
 		if not current_user.confirmed:
-			if request.endpoint not in ['main.index', 'auth.logout']:
+			if request.endpoint not in ['main.index', 'auth.logout'] and '/static/' not in request.path:
 				flash(u'管理员尚未审核，强迫你看首页！')
 				return redirect(url_for('main.index'))
-	# 未登录或未经审核，
+	# 未登录，只能看首页
 	else:
 		# There accour a problem: redirect cause a css prob
-		if request.endpoint != 'main.index' and request.endpoint[:5] != 'auth.':
+		if request.endpoint != 'main.index' and \
+				request.endpoint[:5] != 'auth.' and \
+				'/static/' not in request.path:
 			flash(u'你未登录，强迫你看首页！')
 			return redirect(url_for('main.index'))
 		# 	and not current_user.confirmed \
@@ -104,12 +106,3 @@ def before_request():
 # def unconfirmed():
 # 	# if current_user.is_anonymous or current_user.confirmed:
 # 	# return render_template('auth/unconfirmed.html')
-
-# @auth.route('/confirm')
-# @login_required
-# def resend_confirmation():
-# 	token = current_user.generate_confirmation_token()
-# 	send_email(current_user.email, u'[确认邮箱]', 'auth/email/confirm', \
-# 		user=current_user, token=token)
-# 	flash(u'邮件已发至你邮箱，请看看' + token)
-# 	return redirect(url_for('main.index'))
