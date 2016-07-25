@@ -92,11 +92,12 @@ def before_request():
 	# 未登录，只能看首页
 	else:
 		# There accour a problem: redirect cause a css prob
-		if request.endpoint != 'main.index' and \
-				request.endpoint[:5] != 'auth.' and \
-				'/static/' not in request.path:
-			flash(u'你未登录，强迫你看首页！')
-			return redirect(url_for('main.index'))
+		if request.endpoint:
+			if request.endpoint != 'main.index' and \
+					request.endpoint[:5] != 'auth.' and \
+					'/static/' not in request.path:
+				flash(u'你未登录，强迫你看首页！')
+				return redirect(url_for('main.index'))
 		# 	and not current_user.confirmed \
 		# 	and request.endpoint[:5] != 'auth.' \
 		# 	and request.endpoint != 'static':
