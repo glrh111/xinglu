@@ -91,11 +91,10 @@ def before_request():
 				return redirect(url_for('main.index'))
 	# 未登录或未经审核，
 	else:
-		pass
 		# There accour a problem: redirect cause a css prob
-		# if not (request.endpoint == 'main.index'):
-		# 		flash(u'你未登录，强迫你看首页！')
-		# 		return redirect(url_for('main.index'))
+		if request.endpoint != 'main.index' and request.endpoint[:5] != 'auth.':
+			flash(u'你未登录，强迫你看首页！')
+			return redirect(url_for('main.index'))
 		# 	and not current_user.confirmed \
 		# 	and request.endpoint[:5] != 'auth.' \
 		# 	and request.endpoint != 'static':
