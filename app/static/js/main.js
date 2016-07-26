@@ -84,6 +84,7 @@ var uploader = Qiniu.uploader({
                });
         },
         'Error': function(up, err, errTip) {
+               $('#upload_message').html('');
                $('#upload_message').html(errTip);
         },
         'UploadComplete': function() {
@@ -112,12 +113,12 @@ var uploader = Qiniu.uploader({
       max_file_size : '5mb',
       prevent_duplicates: true,
       // Specify what files to browse for
-      mime_types: [
-          // {title : "flv files", extensions : "flv"} // 限定flv后缀上传格式上传
-          // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}, // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
-          {title : "Image files", extensions : "jpg,gif,png"}, // 限定jpg,gif,png后缀上传
-          // {title : "Zip files", extensions : "zip"} // 限定zip后缀上传
-      ]
+      // mime_types: [
+      //     // {title : "flv files", extensions : "flv"} // 限定flv后缀上传格式上传
+      //     // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}, // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
+      //     {title : "Image files", extensions : "jpg,gif,png"}, // 限定jpg,gif,png后缀上传
+      //     // {title : "Zip files", extensions : "zip"} // 限定zip后缀上传
+      // ]
     },
 
 });
@@ -188,6 +189,7 @@ var uploader = Q2.uploader({
         'FilesAdded': function(up, files) {
             plupload.each(files, function(file) {
                 // 文件添加进队列后，处理相关的事情
+                $('#upload_message').html('');
             });
         },
         'BeforeUpload': function(up, file) {
@@ -215,6 +217,7 @@ var uploader = Q2.uploader({
                $('#upload_message').html('上传成功！');
         },
         'Error': function(up, err, errTip) {
+               
                //上传出错时，处理相关的事情
                $('#upload_message').html(errTip);
         },
@@ -244,12 +247,12 @@ var uploader = Q2.uploader({
       max_file_size : '5mb',
       prevent_duplicates: true,
       // Specify what files to browse for
-      mime_types: [
-          // {title : "flv files", extensions : "flv"} // 限定flv后缀上传格式上传
-          // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}, // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
-          {title : "Image files", extensions : "jpg,gif,png"}, // 限定jpg,gif,png后缀上传
-          // {title : "Zip files", extensions : "zip"} // 限定zip后缀上传
-      ]
+      // mime_types: [
+      //     // {title : "flv files", extensions : "flv"} // 限定flv后缀上传格式上传
+      //     // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}, // 限定flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4后缀格式上传
+      //     {title : "Image files", extensions : "jpg,gif,png"}, // 限定jpg,gif,png后缀上传
+      //     // {title : "Zip files", extensions : "zip"} // 限定zip后缀上传
+      // ]
     },
 
 });
