@@ -37,7 +37,8 @@ class APITestCase(MyTestCase):
         u = User(username='shangdan_1', \
                  email='daye_2@12306.com',\
                  password='dooooog',\
-                 role=r)
+                 role=r,
+                 confirmed=True)
         db.session.add(u)
         db.session.commit()
 

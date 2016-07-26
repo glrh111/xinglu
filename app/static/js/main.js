@@ -51,6 +51,7 @@ var uploader = Qiniu.uploader({
         },
         'UploadProgress': function(up, file) {
                // 每个文件上传时，处理相关的事情
+               $('#upload_message').html('正在上传...');
         },
         'FileUploaded': function(up, file, info) {
                // 每个文件上传成功后，处理相关的事情
@@ -75,16 +76,15 @@ var uploader = Qiniu.uploader({
                   data: up_data,
                   // dataType: 'json',
                   success: function(e) {
-                    $('#upload_message').html('图片保存成功！刷新查看');
+                    $('#upload_message').html('上传成功！刷新查看');
                   },
                   error: function(e) {
-                    $('#upload_message').html('图片保存失败！');
+                    $('#upload_message').html('上传失败！状态码：'+e.status_code);
                   },
                });
-
         },
         'Error': function(up, err, errTip) {
-               //上传出错时，处理相关的事情
+               $('#upload_message').html(errTip);
         },
         'UploadComplete': function() {
                //队列文件处理完毕后，处理相关的事情
@@ -195,6 +195,7 @@ var uploader = Q2.uploader({
         },
         'UploadProgress': function(up, file) {
                // 每个文件上传时，处理相关的事情
+               $('#upload_message').html('正在上传...')
         },
         'FileUploaded': function(up, file, info) {
                // 每个文件上传成功后，处理相关的事情
@@ -211,9 +212,11 @@ var uploader = Q2.uploader({
                var source_link = 'http://' + domain + '/' +res.key; //获取上传成功后的文件的Url
                t1 = document.getElementById("flask-pagedown-body");
                t1.value += '![](' + source_link + '-contentCrop' + ')';
+               $('#upload_message').html('上传成功！');
         },
         'Error': function(up, err, errTip) {
                //上传出错时，处理相关的事情
+               $('#upload_message').html(errTip);
         },
         'UploadComplete': function() {
                //队列文件处理完毕后，处理相关的事情

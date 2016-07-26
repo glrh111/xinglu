@@ -18,6 +18,15 @@
     
     <div>
         {{ wtf.quick_form(form) }}
+        <br>
+        <div id="upload_content_container">
+            {# 上传按钮 #}            
+
+            <button id="upload_content_button" class="btn btn-default" aria-label="Left Align">
+               <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> 上传图片
+            </button><label id="upload_message"></label>
+        </div>
+        <br>
     </div>
 
 {% endblock %}

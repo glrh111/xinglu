@@ -78,32 +78,32 @@ def confirmer_list():
 
 @auth.before_app_request
 def before_request():
-	if current_user.is_authenticated:
-		current_user.ping()
-		# 审核未通过，强制退出
-		if not current_user.seenable:
-			logout_user()
-			flash(u'你未通过审核，已经退出系统！')
-			return redirect(url_for('main.index'))
-		if not current_user.confirmed:
-			if request.endpoint not in ['main.index', 'auth.logout'] and '/static/' not in request.path:
-				flash(u'管理员尚未审核，强迫你看首页！')
-				return redirect(url_for('main.index'))
-	# 未登录，只能看首页
-	else:
-		# There accour a problem: redirect cause a css prob
-		if request.endpoint:
-			if request.endpoint != 'main.index' and \
-					request.endpoint[:5] != 'auth.' and \
-					'/static/' not in request.path:
-				flash(u'你未登录，强迫你看首页！')
-				return redirect(url_for('main.index'))
-		# 	and not current_user.confirmed \
-		# 	and request.endpoint[:5] != 'auth.' \
-		# 	and request.endpoint != 'static':
-		# return redirect(url_for('auth.unconfirmed'))
+	# 这里写的有问题
+	# 未审核或未登录用户，只能访问首页，但是首页的外链资源加载有问题
+	# 这么写的话，很麻烦，没有扩展性
+	if request.endpoint:
+		# api.  自有它的认证机制
+		if request.endpoint[:3] != 'api':
+			if current_user.is_authenticated:
+				current_user.ping()
+				# 审核未通过，强制退出
+				if not current_user.seenable:
+					logout_user()
+					flash(u'你未通过审核，已经退出系统！')
+					return redirect(url_for('main.index'))
+				# 尚未审核，只能看首页
+				if not current_user.confirmed:
+					if request.endpoint not in ['main.index', 'auth.logout'] and \
+						'/static/' not in request.path and \
+						'clouddn' not in request.path:
+						flash(u'管理员尚未审核，强迫你看首页！')
+						return redirect(url_for('main.index'))
+			# 未登录，只能看首页，或登录
+			else:
+				if request.endpoint != 'main.index' and \
+						request.endpoint[:5] != 'auth.' and \
+						'/static/' not in request.path and \
+						'clouddn' not in request.path:
+					flash(u'你未登录，强迫你看首页！')
+					return redirect(url_for('main.index'))
 
-# @auth.route('/unconfirmed')
-# def unconfirmed():
-# 	# if current_user.is_anonymous or current_user.confirmed:
-# 	# return render_template('auth/unconfirmed.html')

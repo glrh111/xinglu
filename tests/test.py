@@ -16,7 +16,8 @@ class MyTestCase(unittest.TestCase):
         # add administrator
         u1 = User(username='glrh11', \
                   email=current_app.config['FLASK_ADMIN'], \
-                  password='qwe123')
+                  password='qwe123',
+                  confirmed=True)
         db.session.add(u1)
         db.session.commit()
         self.client = self.app.test_client(use_cookies=True)

@@ -76,6 +76,9 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     height: 50px;
     border-radius: 25px
 }
+.navbar-header img {
+    height: 50px;
+}
 /* 首页左边的LOGO */
 .navbar-brand {
     padding: 0px 15px;
@@ -84,9 +87,20 @@ body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 .media-body a:hover {
     text-decoration: none;
 }
-
-.media-body img {
+/* markdown 预览 图片高度 */
+.media-body img, .flask-pagedown-preview img {
     height: 200px;
     margin: 2px;
     border-radius: 2px;
 }
+.flask-pagedown-preview {
+    margin-top: 10px;
+}
+#upload_message {
+    margin-left: 10px;
+}
+
+/*flask-pagedown-preview {
+    height: 200px;
+    border-radius: 5px;
+}  */ 

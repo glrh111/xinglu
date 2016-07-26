@@ -191,7 +191,7 @@ class User(db.Model, UserMixin):
 					 location=forgery_py.address.city(),\
 					 about_me=forgery_py.lorem_ipsum.sentence(),\
 					 member_since=forgery_py.date.date(True),
-					 head_portrait='http://o9hjg7h8u.bkt.clouddn.com/favicon.ico')
+					 head_portrait='http://o9hjg7h8u.bkt.clouddn.com/head_portrait.png-headPortraitCrop')
 			db.session.add(u)
 			# is in afraid that username and email may be the same
 			try:

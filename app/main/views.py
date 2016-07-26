@@ -258,6 +258,10 @@ def phone_number_seenable_toggle(id):
     if user != current_user:
         flash(u'不要尝试修改别人的资料')
         return redirect(url_for('main.index'))
+    if user.phone_number_seenable:
+        flash(u'当前手机号对外不可见！')
+    else:
+        flash(u'当前手机号对外可见！')
     user.phone_number_seenable = not user.phone_number_seenable
     db.session.add(user)
     return redirect(url_for('main.user', username=user.username))

@@ -14,7 +14,7 @@ class SeleniumTestCase(unittest.TestCase):
     def setUpClass(cls):
         # start chrome
         try:
-            cls.client = webdriver.Chrome()
+            cls.client = webdriver.Firefox()
         except:
             pass
 
