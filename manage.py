@@ -47,7 +47,16 @@ def test(coverage=False):
 
 @manager.command
 def deploy():
-    pass
+    '''
+    Run deployment tasks.
+    '''
+    from flask.ext.migrate import upgrade
+
+    # upgrade
+    upgrade()
+
+    # insert roles
+    Role.insert_roles()
 
 @babel.localeselector
 def get_locale():

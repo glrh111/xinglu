@@ -8,7 +8,6 @@ from ..models import Role, User
 
 class EditProfileForm(Form):
     name = StringField(u'姓名', validators=[Length(0, 64)])
-    password = PasswordField(u'密码')
     phone_number = StringField(u'手机号码')
     location = StringField(u'位置', validators=[Length(0, 64)])
     about_me = TextAreaField(u'个人介绍')
@@ -26,7 +25,10 @@ class EditProfileAdminForm(Form):
 
     email = StringField(u'电子邮箱', validators=[Required(), Length(0, 64), Email()])
     username = StringField(u'用户名', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点、下划线')])
-    password = PasswordField(u'密码')
+    password = PasswordField(u'新密码', \
+            validators=[Required(), EqualTo('password2', message=u'密码不一致')])
+    password2 = PasswordField(u'确认新密码', validators=[Required()])
+ 
     phone_number = StringField(u'手机号码')
 
     role = SelectField(u'角色', coerce=int)
@@ -37,15 +39,21 @@ class EditProfileAdminForm(Form):
     about_me = TextAreaField(u'个人介绍')
     submit = SubmitField(u'保存修改')
 
-    # def validate_email(self, field):
-    #     if field.data != self.user.email and \
-    #         User.query.filter_by(email=field.data).first():
-    #         raise ValidationError(u'该邮箱已被使用，请更换邮箱注册或直接登录！')
+    def validate_email(self, field):
+        if field.data != self.user.email and \
+            User.query.filter_by(email=field.data).first():
+            raise ValidationError(u'该邮箱已被使用，请更换邮箱注册或直接登录！')
 
     def validate_username(self, field):
         if field.data != self.user.username and \
             User.query.filter_by(username=field.data).first():
             raise ValidationError(u'该用户名已被该网站注册，请更换用户名注册或直接登录！')
+
+class EditPasswordForm(Form):
+    password = PasswordField(u'新密码', \
+            validators=[Required(), EqualTo('password2', message=u'密码不一致')])
+    password2 = PasswordField(u'确认新密码', validators=[Required()])
+    submit = SubmitField(u'修改密码')
 
 class PostForm(Form):
     body = PageDownField(u'Come on，发个状态让大家乐呵乐呵！', validators=[Required()])

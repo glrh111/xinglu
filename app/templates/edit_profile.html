@@ -20,6 +20,13 @@
         <label id="upload_message"></label>
       </div>
       <br>
+
+       {# 修改密码按钮 #}
+    <button class="btn btn-default" onclick="window.location.href='{{ url_for('main.edit_password') }}'">修改密码
+    </button>
+
+    <br>
+    <br>
     {% endif %}
 
 

@@ -5,12 +5,13 @@ from flask import render_template, session, redirect, url_for, flash, request,\
 
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm,\
-                PostForm, CommentForm
+                PostForm, CommentForm, EditPasswordForm
 from .. import db
 from ..models import User, Role, Post, Comment, Permission 
 
 from ..decorators import admin_required, permission_required
-from flask.ext.login import login_required, current_user
+from flask.ext.login import login_required, current_user, \
+                fresh_login_required
 
 import json
 
@@ -78,8 +79,6 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         current_user.name = form.name.data
-        if form.password:
-            current_user.password = form.password.data
         current_user.phone_number = form.phone_number.data
         current_user.location = form.location.data 
         current_user.about_me = form.about_me.data 
@@ -87,11 +86,26 @@ def edit_profile():
         flash(u'资料修改成功~~')
         return redirect(url_for('.user', username=current_user.username))
     form.name.data = current_user.name
-    form.password.data = ''
     form.phone_number.data = current_user.phone_number
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', form=form, user=current_user._get_current_object())
+    return render_template('edit_profile.html', form=form, \
+            user=current_user._get_current_object())
+
+@main.route('/edit-password', methods=['GET', 'POST'])
+@login_required
+@fresh_login_required
+def edit_password():
+    form = EditPasswordForm()
+    if form.validate_on_submit():
+        current_user.password = form.password.data
+        db.session.add(current_user)
+        flash(u'密码修改成功~~')
+        return redirect(url_for('.user', username=current_user.username))
+    form.password.data = ''
+    form.password2.data = ''
+    return render_template('edit_password.html', form=form, \
+            user=current_user._get_current_object())
 
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
