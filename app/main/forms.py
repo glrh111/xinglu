@@ -26,8 +26,8 @@ class EditProfileAdminForm(Form):
     email = StringField(u'电子邮箱', validators=[Required(), Length(0, 64), Email()])
     username = StringField(u'用户名', validators=[Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点、下划线')])
     password = PasswordField(u'新密码', \
-            validators=[Required(), EqualTo('password2', message=u'密码不一致')])
-    password2 = PasswordField(u'确认新密码', validators=[Required()])
+            validators=[EqualTo('password2', message=u'密码不一致')])
+    password2 = PasswordField(u'确认新密码')
  
     phone_number = StringField(u'手机号码')
 

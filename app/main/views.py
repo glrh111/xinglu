@@ -132,6 +132,7 @@ def edit_profile_admin(id):
     form.email.data = user.email
     form.username.data = user.username
     form.password.data = ''
+    form.password2.data = ''
     form.phone_number.data = user.phone_number
     form.role.data = user.role_id
     form.confirmed.data = user.confirmed
