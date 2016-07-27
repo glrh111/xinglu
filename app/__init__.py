@@ -41,7 +41,6 @@ def create_app(config_name):
 	babel.init_app(app)
 	app.config['BABEL_DEFAULT_LOCALE'] = 'zh'
 
-
 	login_manager.init_app(app)
 
 	from .main import main as main_blueprint

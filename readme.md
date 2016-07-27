@@ -3,6 +3,7 @@ README
 A brief introduction to the app
 
 Author : `glrh11`
+
 Email  : `glrh11@163.com`
 
 --------------------
@@ -22,9 +23,9 @@ Email  : `glrh11@163.com`
 * You could publish a post with pictures powered by markdown;
 * You could also comment below a specific post!
 
-# FrameWork
+# Framework
 
-> CentOS + Nginx + uWSGI + Flask + Python 
+![](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture.png)
 
 # RESTful API Resources
 
