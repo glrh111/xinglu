@@ -1,6 +1,6 @@
 README
 ---------------
-A brief introduction to the app
+A brief introduction to this app.
 
 Author : `glrh11`
 
@@ -11,7 +11,7 @@ Email  : `glrh11@163.com`
 # Table of Content
 
 * [Brief Introduction](#brief-introduction)
-* [FrameWork](#framework)
+* [Framework](#framework)
 * [RESTful API Resources](#restful-api-resources)
 * [Deployment](#deployment)
 
@@ -25,7 +25,9 @@ Email  : `glrh11@163.com`
 
 # Framework
 
-![](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture.png)
+> If this picture has not been loaded correctly, click [here](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture.png) instead.
+
+![framework](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture.png)
 
 # RESTful API Resources
 
