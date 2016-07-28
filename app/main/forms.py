@@ -7,13 +7,10 @@ from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from ..models import Role, User
 
 class EditProfileForm(Form):
-    name = StringField(u'姓名', validators=[Length(0, 64)])
+    name = StringField(u'姓名', validators=[Required(), Length(1, 64)])
     phone_number = StringField(u'手机号码')
     location = StringField(u'位置', validators=[Length(0, 64)])
     about_me = TextAreaField(u'个人介绍')
-
-    # 用户头像通过另外的实现
-    # head_portrait = FileField(u'用户头像')
     submit = SubmitField(u'保存修改')
 
 class EditProfileAdminForm(Form):
@@ -34,7 +31,7 @@ class EditProfileAdminForm(Form):
     role = SelectField(u'角色', coerce=int)
     confirmed = BooleanField(u'是否验证通过')
 
-    name = StringField(u'真实姓名', validators=[Length(0, 64)])
+    name = StringField(u'真实姓名', validators=[Required(), Length(1, 64)])
     location = StringField(u'位置', validators=[Length(0, 64)])
     about_me = TextAreaField(u'个人介绍')
     submit = SubmitField(u'保存修改')

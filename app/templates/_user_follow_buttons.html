@@ -1,81 +1,74 @@
-{# 用户页面，头像右侧的按钮组 #}
+<div class="btn-group">
 
-
-    {# 显示评论条数 ----------  示例 #}
-    
-
-
-    <div class="btn-group">
-    
-    {# 姓名链接到本人资料页面 #}
-    <button class="btn btn-default" aria-label="Left Align">
-            {{ user.name }}
-    </button>
-    
-    {# 关注与取消关注 #}
-    {% if current_user.can(Permission.FOLLOW) and user != current_user %}
-        {% if not current_user.is_following(user) %}
-            <button title="关注" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.follow', username=user.username) }}'">
-                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-            </button>
-        {% else %}
-            <button title="取消关注" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.unfollow', username=user.username) }}'">
-                    <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-            </button>
-        {% endif %}
+{# 姓名链接到本人资料页面 #}
+<button class="btn btn-default" aria-label="Left Align">
+    {% if user.name %}
+        {{ user.name }}
+    {% else %}
+        佚名
     {% endif %}
-    
-    {# 粉丝列表 #}
-    <button title="关注者列表" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.followers', username=user.username) }}'">
-        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{ user.followers.count() }}
-    </button>
-    
-    {# 当前页面用户，正在关注本人 #}
-    {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
-        
-        {% if current_user.is_following(user) %}
-            
-            {# 当前登录用户关注了页面用户 #}
-            {# 完成 --互相关注-- #}
-            <button class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
-            </button>
+</button>
 
-        {% else %}
-            {# 当前登录用户 木有 关注了页面用户 #}
-            {# 只有单向关注 #}
-            <button class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
-            </button>
-
-        {% endif %}
+{# 关注与取消关注 #}
+{% if current_user.can(Permission.FOLLOW) and user != current_user %}
+    {% if not current_user.is_following(user) %}
+        <button title="关注" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.follow', username=user.username) }}'">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+        </button>
+    {% else %}
+        <button title="取消关注" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.unfollow', username=user.username) }}'">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        </button>
     {% endif %}
-    
-    {# 修改功能 #}
-    
+{% endif %}
 
-    {# 普通修改 #}
-    {% if user == current_user and not current_user.is_administrator() %}
+{# 粉丝列表 #}
+<button title="关注者列表" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.followers', username=user.username) }}'">
+    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{ user.followers.count() }}
+</button>
+
+{# 当前页面用户，正在关注本人 #}
+{% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
+    
+    {% if current_user.is_following(user) %}
         
-        <button class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('.edit_profile') }}'">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        {# 当前登录用户关注了页面用户 #}
+        {# 完成 --互相关注-- #}
+        <button class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+        </button>
+
+    {% else %}
+        {# 当前登录用户 木有 关注了页面用户 #}
+        {# 只有单向关注 #}
+        <button class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
         </button>
 
     {% endif %}
+{% endif %}    
 
-    {# 管理员修改 #}
-    {% if current_user.is_administrator() %}
-        
-        <button title="管理员修改" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('.edit_profile_admin', id=user.id) }}'">
-               <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
-        </button>
-
-    {% endif %}
-
+{# 普通修改 #}
+{% if user == current_user and not current_user.is_administrator() %}
     
-    </div>{# 按钮组结束 #}
+    <button class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('.edit_profile') }}'">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+    </button>
 
-            
+{% endif %}
+
+{# 管理员修改 #}
+{% if current_user.is_administrator() %}
+    
+    <button title="管理员修改" class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('.edit_profile_admin', id=user.id) }}'">
+           <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+    </button>
+
+{% endif %}
+
+</div>{# 按钮组结束 #}
+
+        
 
 
 

@@ -23,7 +23,7 @@ def index():
         db.session.add(post)
         return redirect(url_for('main.index'))
 
-    # 分页功能
+    # pagination
     page = request.args.get('page', 1, type=int)
     pagination = Post.query.filter_by(seenable=True).order_by(Post.timestamp.desc()).paginate(\
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
@@ -36,7 +36,7 @@ def index():
 @main.route('/user-list', methods=['GET', 'POST'])
 @login_required
 def user_list():
-    # 分页相关
+    # pagination
     page = request.args.get('page', 1, type=int)
     pagination = User.query.filter_by(confirmed=True).order_by(User.id).paginate(\
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
@@ -46,13 +46,14 @@ def user_list():
     return render_template('user_list.html', users=users, pagination=pagination, \
         endpoint='main.user_list')
 
-# main page for each role
+# index page for admin
 @main.route('/admin')
 @login_required
 @admin_required
 def admin_only():
 	return "for administrators only"
 
+# index oage for moderator
 @main.route('/moderator')
 @login_required
 @permission_required(Permission.MODERATE_COMMENTS)
@@ -63,14 +64,13 @@ def moderator_only():
 def user(username):
     user = User.query.filter_by(username=username).first()
 
-        # 分页功能
+    # pagination
     page = request.args.get('page', 1, type=int)
     pagination = user.posts.filter_by(seenable=True).order_by(Post.timestamp.desc()).paginate(\
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
 
-    # posts = user.posts.order_by(Post.timestamp.desc()).all()
     return render_template('user.html', user=user, posts=posts, pagination=pagination)
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
@@ -116,10 +116,9 @@ def edit_profile_admin(id):
     if form.validate_on_submit():
         user.email = form.email.data
         user.username = form.username.data
-        if form.password:
+        if form.password.data:
             user.password = form.password.data
         user.phone_number = form.phone_number.data
-        # get role by id
         user.role = Role.query.get(form.role.data)
         user.confirmed = form.confirmed.data
         user.name = form.name.data
@@ -146,7 +145,6 @@ def edit_profile_admin(id):
 @login_required
 def post(id):
     post = Post.query.get_or_404(id)
-
     form = CommentForm()
     if form.validate_on_submit():
         comment = Comment(body=form.body.data,\
@@ -213,7 +211,6 @@ def delete_comment(id):
     flash(u'成功删除评论！')
     return redirect(url_for('main.post', id=comment.post_id))
 
-# 关注相关
 @main.route('/follow/<username>')
 @login_required
 @permission_required(Permission.FOLLOW)
@@ -251,18 +248,17 @@ def followers(username):
     if user is None:
         flash(u'该用户不存在')
         return redirect(url_for('main.index'))
-    # 分页
+    # pagination
     page = request.args.get('page', 1, type=int)
     pagination = user.followers.paginate(\
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],\
         error_out=False)
     followers = [item.follower for item in pagination.items]
-    print followers
     return render_template('followers.html', user=user, title=u'关注者',\
         endpoint='main.followers', pagination=pagination,\
         followers=followers)
 
-# 手机号码是否公开显示
+# phone number seenable to others
 @main.route('/phone-number-seenable-toggle/<int:id>')
 @login_required
 def phone_number_seenable_toggle(id):
@@ -281,7 +277,7 @@ def phone_number_seenable_toggle(id):
     db.session.add(user)
     return redirect(url_for('main.user', username=user.username))
 
-# 上传文件相关
+# this function has not been used
 from ..helpers import upload_image
 @main.route('/upload-head/<username>')
 @login_required
@@ -296,14 +292,10 @@ def upload_head(username):
     if user is None:
         flash(u'该用户不存在')
         return redirect(url_for('main.user_list'))
-    # 非管理员或本人不得修改
+    # if you are not admin or self, can't change it
     if current_user != user and not current_user.can(Permission.ADMINISTER):
         flash(u'你没有权限修改他人的头像信息')
         return redirect('main.user', username=user.username)
-
-    # json return jsonify
-    # if user is None:
-    #     return jsonify(result=json.dumps(result, encoding='utf-8'))
 
     # upload image and get status
     img_src, status = upload_image('head', head_img_name)
@@ -340,17 +332,6 @@ def save_head_to_db():
         db.session.add(current_user)
         return jsonify(status_code=1)
     return jsonify(status_code=0)
-
-# save head url to db
-# @main.route('/save-content-to-db', methods=['GET', 'POST'])
-# @login_required
-# def save_content_to_db():
-#     head_url = request.args.get('content_url', '', type=str)
-#     if head_url:
-#         current_user.head_portrait = head_url + '-headPortraitCrop'
-#         db.session.add(current_user)
-#         return jsonify(status_code=1)
-#     return jsonify(status_code=0)
 
 # for selenium tests
 @main.route('/shutdown')

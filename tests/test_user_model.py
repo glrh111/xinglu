@@ -33,15 +33,3 @@ class UserModelTestCase(MyTestCase):
 		u2 = User(email='suibianxiede@111.com')
 		self.assertTrue(u1.role.name=='Administrator')
 		self.assertTrue(u2.role.name!='Administrator')
-
-	# 确认邮件相关，现在不要，落伍了
-
-	# def test_confirmed_default(self):
-	# 	u = User(password='suijide')
-	# 	self.assertFalse(u.confirmed)
-
-	# def test_confirmed_right(self):
-	# 	u = User(password='suiyiqide')
-	# 	token = u.generate_confirmation_token()
-	# 	self.assertTrue(u.confirm(token))
-	# 	self.assertTrue(u.confirmed)

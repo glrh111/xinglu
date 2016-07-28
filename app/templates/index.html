@@ -15,9 +15,11 @@
     <div class="page-header">
 
     {% if not current_user.is_authenticated %}
+        <h1>行者无疆</h1>
         <p>请<a href="{{ url_for('auth.register') }}">注册</a>或<a href="{{ url_for('auth.login') }}">登录</a>以使用全部功能。</p>
     {% endif %}
     {% if current_user.is_authenticated and not current_user.confirmed %}
+        <h1>行者无疆</h1>
         <p>请等待管理员审核以使用全部功能。</p>
     {% endif %}
     <div>

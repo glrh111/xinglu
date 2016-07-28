@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -7,6 +8,7 @@ class Config:
 	FLASK_MAIL_SUBJECT_PREFIX = '[glrh11]'
 	FLASK_MAIL_SENDER = 'glrh11 <glrh11_test@163.com>'
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN') or 'glrh11_test@163.com'
+	DEFAULT_NAME = u'佚名'
 	# locale
 	BABEL_DEFAULT_LOCALE = 'zh_Hans_CN'
 
@@ -19,19 +21,19 @@ class Config:
 	QINIU_BUCKET_NAME = 'flask-test'
 	QINIU_PATH_PREFIX = 'http://o9hjg7h8u.bkt.clouddn.com/'
 
-	# pagination related
+	# pagination
 	FLASKY_POSTS_PER_PAGE = 20
 	FLASKY_FOLLOWERS_PER_PAGE = 20
 	FLASKY_COMMENTS_PER_PAGE = 20
 
-	# email related
+	# email
 	MAIL_SERVER = 'smtp.163.com'
 	MAIL_PORT = 25
 	MAIL_USE_TLS = True
 	MAIL_USERNAME = 'glrh11@163.com'
 	MAIL_PASSWORD = 'woshishouquanma1' #'os.environ.get('MAIL_PASSWORD')'
 
-	# locale related
+	# locale
 	# Refer: https://phraseapp.com/blog/posts/python-localization-for-flask-applications/
 	LANGUAGES = {
 	    'en': 'English',
@@ -44,9 +46,6 @@ class Config:
 
 class DevelopmentConfig(Config):
 	DEBUG = True
-	# datebase example
-	# SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
-	# SQLALCHEMY_DATABASE_URI = 'postgresql://111:123@567:1111/xiangjianhuan'
 	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:qwe123@localhost:5432/xiangjianhuan'
 
 

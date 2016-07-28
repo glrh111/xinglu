@@ -33,29 +33,13 @@
 
     </div>
 
-
-
-
-
-
     {# 评论表单 #}
     {# 丑的一比 #}
     {% if current_user.can(Permission.COMMENT) %}    
         {{ wtf.quick_form(form) }}
     {% endif %}
-        
-
-        {# 没写好，数据库不能链接，艹 #}
-        {# bootstrap2里面的，3好像不支持，艹 #}
-{#         <div class="input-append">
-          <input class="span2" id="appendedInputButton" type="text">
-          <button class="btn" type="button">评论</button>
-        </div> #}
 
 </div>
-
-
-{# 外框 #}
 
     {# 评论列表 #}
     {# 空白的不显示 #}

@@ -1,6 +1,9 @@
-{# 新的 #}
-
 <div class="bs-example posts">
+
+{% if not posts %}
+    <p>点击<a href="{{url_for('main.index')}}">这里</a>让你的心情在云端飘扬~</p>
+{% endif %}
+
 {% for post in posts %}
     
     <div class="media">
@@ -19,25 +22,14 @@
             {# 一组按钮 修改等等 #}
             {% include "_post_edit_buttons.html" %}
         </h4>
-        {# 评论内容 #}
-        {# <p class=""> #}
-        {# <br /> #}
-        {# <div class="well list-group-item-text"> #}
             {% if post.body_html %}
                 {{ post.body_html | safe }}
             {% else %}
                 {{ post.body }}
             {% endif %}
-{#             <br>
-            {{ moment(post.timestamp).format('LLL')}}
-            <br>
-            {{ moment().format('LLL') }} #}
             <br>
             {{ moment(post.timestamp).fromNow() }}
-
         </div>
-        {# </p> #}
-        {# </div> #}
     </div>
 {% endfor %}
 </div>

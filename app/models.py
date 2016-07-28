@@ -66,11 +66,12 @@ class Permission:
 
 class User(db.Model, UserMixin):
 
-	# 根据邮箱，提供默认权限
+	# administrator is authed by 'FLASK_ADMIN'
 	def __init__(self, **kwargs):
 		super(User, self).__init__(**kwargs)
 		if self.email==current_app.config['FLASK_ADMIN']:
 			self.role = Role.query.filter_by(permissions=0xff).first()
+			self.confirmed = True
 		if self.role is None:
 			self.role = Role.query.filter_by(default=True).first()
 
@@ -98,8 +99,9 @@ class User(db.Model, UserMixin):
 	# change utcnow to now
 	member_since = db.Column(db.DateTime(), default=datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-	# 用户头像的七牛cdn 链接
-	head_portrait = db.Column(db.String(128))
+	# qiniu cnd
+	head_portrait = db.Column(db.String(128), \
+		default='http://o9hjg7h8u.bkt.clouddn.com/head_portrait.png-headPortraitCrop')
 
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 
@@ -134,7 +136,7 @@ class User(db.Model, UserMixin):
 	def is_followed_by(self, user):
 		return self.followers.filter_by(follower_id=user.id).first() is not None
 
-	# 生成密码的hash，并提供
+	# 生成密码的hash
 	@property
 	def password(self):
 	    raise AttributeError('password is not a readble attribute')
@@ -231,7 +233,7 @@ class User(db.Model, UserMixin):
 		}
 		return json_user
 
-	# print提供便利
+	# print
 	def __repr__(self):
 		return '<User %r>' % self.username
 
@@ -245,14 +247,13 @@ class Post(db.Model):
 	body = db.Column(db.Text)
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-	# 用于将前端提交的mk渲染缓存
+	# render `body` -> `body_html`
 	body_html = db.Column(db.Text)
-	# 评论相关的 field
 	comments = db.relationship('Comment', backref='post', lazy='dynamic')
-	# 文章删除字段
+	# logical delete
 	seenable = db.Column(db.Boolean, default=True)
 
-	# 生成虚拟文章post
+	# generate fake posts
 	@staticmethod
 	def generate_fake(count=1000):
 		from random import seed, randint
@@ -280,7 +281,7 @@ class Post(db.Model):
 						markdown(value, output_format='html'),\
 						tags=allowed_tags, attributes=allowed_attrs, strip=True))
 
-	# _external is set to whether to generate abs url
+	# _external: full url path
 	def to_json(self):
 		json_post = {
 			'url': url_for('api.get_post', id=self.id, _external=True),
@@ -328,7 +329,7 @@ class Comment(db.Model):
 	disabled = db.Column(db.Boolean)
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-	# 评论删除相关
+	# logical delete
 	seenable = db.Column(db.Boolean, default=True)
 
 	@staticmethod
@@ -357,5 +358,5 @@ class Comment(db.Model):
 			raise ValidationError('comment does not have a body')
 		return Comment(body=body)
 
-# body 字段发生变化是，更新  body_html
+# body ---trigger>>> body_html
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)

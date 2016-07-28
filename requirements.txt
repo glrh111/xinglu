@@ -20,7 +20,6 @@ functools32==3.2.3.post2
 itsdangerous==0.24
 Jinja2==2.8
 Werkzeug==0.11.9
-mysql
 qiniu
 psycopg2
 flask-bower

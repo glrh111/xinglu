@@ -20,7 +20,7 @@ def login():
 			user = User.query.filter_by(username=form.email.data).first()
 		if user is not None and user.verify_password(form.password.data):
 			# login_user(user, form.remember_me.data)
-			login_user(user, remember=True)
+			login_user(user, remember=True, force=True)
 			return redirect(request.args.get('next') or url_for('main.index'))
 		flash(u'用户名或密码错误')
 	return render_template('auth/login.html', form=form)
@@ -34,8 +34,9 @@ def logout():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
 	form = RegisterForm()
-	tip = ''
 	if form.validate_on_submit():
+		if not form.name.data:
+			form.name.data = current_app.config['DEFAULT_NAME']
 		user = User(email=form.email.data, username=form.username.data, \
 			password=form.password.data,\
 			head_portrait=current_app.config['HEAD_PORTRAIT'], \
