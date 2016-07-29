@@ -9,18 +9,14 @@
 
     {# 显示评论条数 #}
     <button class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.post', id=post.id) }}'">
-        {# <button class="btn btn-default"> #}
-            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> {{ post.comments.count() }}
-        {# </button> #}
+        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> {{ post.comments.filter_by(seenable=True).count() }}
     </button>
 
     {# 显示修改或管理员修改 #}
     {% if current_user == post.author and not current_user.is_administrator() %}
         {# 一般修改 #}
         <button class="btn btn-default" aria-label="Left Align" onclick="window.location.href='{{ url_for('main.edit_post', id=post.id) }}'">
-            {# <button class="btn btn-default"> #}
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            {# </button> #}
         </button>
 
 
