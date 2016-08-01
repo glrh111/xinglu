@@ -27,7 +27,7 @@ Email  : `glrh11@163.com`
 
 > If this picture has not been loaded correctly, click [here](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture.png) instead.
 
-![framework](http://o9hjg7h8u.bkt.clouddn.com/app%20strcture%20-%20small.png)
+![framework](https://github.com/glrh111/xinglu/raw/master/docs/app-structure.png)
 
 # RESTful API Resources
 
